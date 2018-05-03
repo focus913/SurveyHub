@@ -8,6 +8,7 @@ CREATE TABLE account (
 	email VARCHAR(128),
 	password VARCHAR(256),
 	type INT, // surveyor/surveyee
+	verify_code VARCHAR(256),
 	verified BOOL
 );
 
@@ -19,20 +20,20 @@ CREATE TABLE survey (
 	expire_time DATE
 );
 
-CREATE TABLE questions (
+CREATE TABLE question (
 	id VARCHAR(256) PRIMARY KEY,
 	survey_id VARCHAR(256),
 	content_json BLOB, // maybe blob
 );
 
-CREATE TABLE answers (
+CREATE TABLE answer (
 	survey_id   VARCHAR(256),
 	question_id VARCHAR(256),
 	account_id VARCHAR(256),
 	content_json BLOB
 );
 
-CREATE TABLE invitations (
+CREATE TABLE invitation (
 	url TEXT,
 	survey_id VARCHAR(256),
 	to_email VARCHAR(256),
@@ -63,7 +64,6 @@ class Account {
 
 class Survey {
 	String survey_id;
-	Account account;
 	Type type;
 	Status status;
 	Date expireTime;
@@ -87,13 +87,14 @@ class Invitation {
 
 class Question {
 	String question_id;
-
+	Type type;
 	//ManyToOne
 	String survey_id;
 	String content;
 }
 
 class Answer {
+	Type type;
 	String survey_id;
 	String question_id;
 	String account_id;
