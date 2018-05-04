@@ -1,8 +1,10 @@
 package edu.sjsu.cmpe275.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "survey")
@@ -14,11 +16,16 @@ public class Survey {
     }
 
     public enum SurveyStatus {
-        EDITING,
+        EDITTING,
         PUBLISHED,
-        COMPLETED,
-        CLOSED,
-        EXPIRED
+        CLOSED
+    }
+
+    public enum Action {
+        EXTEND,
+        CLOSE,
+        PUBLISH,
+        UNPUBLISH
     }
 
     @Id
@@ -42,13 +49,13 @@ public class Survey {
     private Date expireTime;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
-    List<Invitation> invitations;
+    List<Invitation> invitations = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
-    List<Question> questions;
+    List<Question> questions = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "joinedSurveys")
-    List<Account> participants;
+    List<Account> participants = new ArrayList<>();
 
     public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
@@ -122,5 +129,9 @@ public class Survey {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Survey() {
+        this.surveyId = "survey_" + UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

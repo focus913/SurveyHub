@@ -3,14 +3,13 @@ package edu.sjsu.cmpe275.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "question")
 public class Question {
-
-    public enum QuestionType {
-
-    }
 
     @Id
     @Column(name = "question_id")
@@ -20,6 +19,9 @@ public class Question {
     @JoinColumn(name = "survey_id", nullable = false)
     @JsonIgnore
     private Survey survey;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     @Column(name = "content", nullable = true)
     @Lob
@@ -47,5 +49,33 @@ public class Question {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Question)) {
+            return false;
+        }
+
+        Question other = (Question)o;
+        return other.questionId.equals(questionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return questionId.hashCode();
+    }
+
+
+    public Question() {
+        this.questionId = "question_" + UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

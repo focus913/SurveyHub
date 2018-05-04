@@ -1,7 +1,9 @@
 package edu.sjsu.cmpe275.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "account")
@@ -31,13 +33,21 @@ public class Account {
     private boolean verified;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    private List<Survey> createSurveys;
+    private List<Survey> createSurveys = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "account_survey",
+    @JoinTable(name = "account_to_survey",
                 joinColumns = { @JoinColumn(name = "survey_id")},
                 inverseJoinColumns = { @JoinColumn(name = "account_id")})
-    private List<Survey> joinedSurveys;
+    private List<Survey> joinedSurveys = new ArrayList<>();
+
+    public List<Survey> getCreateSurveys() {
+        return createSurveys;
+    }
+
+    public void setCreateSurveys(List<Survey> createSurveys) {
+        this.createSurveys = createSurveys;
+    }
 
     public AccountType getType() {
         return type;
@@ -102,5 +112,14 @@ public class Account {
         }
         Account other = (Account)o;
         return accountId.equals(other.accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return accountId.hashCode();
+    }
+
+    public Account() {
+        this.accountId = "account_" + UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

@@ -16,7 +16,7 @@ CREATE TABLE survey (
 	survey_id VARCHAR(256) PRIMARY KEY,
 	creator VARCHAR(256) FOREIGN KEY,
 	survey_type INT,
-	status INT, (Editing, Published, Completed, Closed, Expired)
+	status INT, (Editing, Published, Closed)
 	expire_time DATE
 );
 
@@ -137,15 +137,30 @@ GET
 Return Survey for surveyor or surveyee in Json, HTTP 200/404
 
 PUT
-/survey/{surveyId}
+/survey?accountId
 Return HTTP 200
 
 UPDATE
-/survey/{surveyId}?endTime=xxx
+/survey/{surveyId}?action={extend/close/publish/unpublish}
+Return HTTP 200
+
+GET
+/survey/{surveyId}
 Return HTTP 200
 
 PUT
-/answer?surveyId=xxx&questionId=yyy&accountId=zzz
+/question?surveyId=xxx
+Json Body of question list
+
+DELETE
+/question/{questionId}
+
+PUT
+/answer
+Return HTTP 200
+
+GET
+/answer?survey_id=xxx[&account_id=zzz]
 Return HTTP 200
 
 POST
@@ -155,11 +170,14 @@ Return HTTP 204
 POST
 /invitation?surveyId=xxx&email=yy,zz,xx
 
+POST
+/confirm?email=xxx
+
 GET
 /invitation/{invitation_url}
 Return HTTP 200/404
 
 POST
-/submit/surveyId=xxx?accountId
+/submit/surveyId=xxx?accountId=yyy
 Return HTTP 204
 ```
