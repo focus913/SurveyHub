@@ -48,8 +48,11 @@ public class Survey {
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
-    List<Invitation> invitations = new ArrayList<>();
+    @Column(name = "participant_num", nullable = false)
+    private int participantNum;
+
+    @Column(name = "invitation_num", nullable = false)
+    private int invitationNum;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
     List<Question> questions = new ArrayList<>();
@@ -73,10 +76,6 @@ public class Survey {
         this.expireTime = expireTime;
     }
 
-    public void setInvitations(List<Invitation> invitations) {
-        this.invitations = invitations;
-    }
-
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
@@ -96,10 +95,6 @@ public class Survey {
 
     public Date getExpireTime() {
         return expireTime;
-    }
-
-    public List<Invitation> getInvitations() {
-        return invitations;
     }
 
     public List<Question> getQuestions() {
@@ -131,7 +126,24 @@ public class Survey {
         this.createTime = createTime;
     }
 
+    public int getParticipantNum() {
+        return participantNum;
+    }
+
+    public void setParticipantNum(int participantNum) {
+        this.participantNum = participantNum;
+    }
+
+    public int getInvitationNum() {
+        return invitationNum;
+    }
+
+    public void setInvitationNum(int invitationNum) {
+        this.invitationNum = invitationNum;
+    }
+
     public Survey() {
         this.surveyId = "survey_" + UUID.randomUUID().toString().replaceAll("-", "");
+        this.participantNum = 0;
     }
 }

@@ -2,10 +2,14 @@ package edu.sjsu.cmpe275.service;
 
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.*;
+import jdk.net.SocketFlow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
+@Component("SurveyHubService")
 public class SurveyHubService {
     @Autowired
     AccountRepository accountRepository;
@@ -25,7 +29,10 @@ public class SurveyHubService {
     @Autowired
     AccountToSurveyRepository accountToSurveyRepository;
 
-    public void createSurvey(String accountId, Survey survey, boolean publish) {
+    @Autowired
+    SurveyHubEmailService surveyHubEmailService;
+
+    public Survey createSurvey(String accountId, Survey survey) {
         // Get account
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
         if (!maybeAccount.isPresent()) {
@@ -34,15 +41,59 @@ public class SurveyHubService {
 
         survey.setCreator(maybeAccount.get());
         survey.setCreateTime(new Date());
-        survey.setStatus(publish ? Survey.SurveyStatus.PUBLISHED : Survey.SurveyStatus.EDITTING);
+        survey.setStatus(Survey.SurveyStatus.EDITTING);
+        for (Question question : survey.getQuestions()) {
+            question.setSurvey(survey);
+        }
 
         // Save survey
         surveyRepository.save(survey);
+        return survey;
+    }
 
-        // Send invitation email for closed type
-        if (publish && survey.getType() == Survey.SurveyType.CLOSED_INVITATION) {
-            sendInvitation(survey.getInvitations());
+    public void saveQuestions(String surveyId, List<Question> questions) {
+        Survey survey = getSurvey(surveyId);
+        List<Question> added = new ArrayList<>();
+        for (Question q : questions) {
+            boolean existed = false;
+            for (Question existedQuestion : survey.getQuestions()) {
+                if (existedQuestion.getQuestionId().equals(q.getQuestionId())) {
+                    existedQuestion.setContent(q.getContent());
+                    existed = true;
+                    break;
+                }
+            }
+            if (!existed) {
+                added.add(q);
+            }
         }
+        for (Question toAdd : added) {
+            toAdd.setSurvey(survey);
+        }
+        survey.getQuestions().addAll(questions);
+        surveyRepository.save(survey);
+    }
+
+    public void publishSurvey(String surveyId) {
+        Survey survey = getSurvey(surveyId);
+        if (survey.getStatus() != Survey.SurveyStatus.EDITTING) {
+            throw new InvalidOperationException("Survey " + surveyId + " already published");
+        }
+        survey.setStatus(Survey.SurveyStatus.PUBLISHED);
+        surveyRepository.save(survey);
+    }
+
+    public void unpublishSurvey(String surveyId) {
+        Survey survey = getSurvey(surveyId);
+        if (survey.getStatus() == Survey.SurveyStatus.CLOSED) {
+            throw new InvalidOperationException("Closed survey can't be unpublished");
+        }
+        survey.setStatus(Survey.SurveyStatus.EDITTING);
+        surveyRepository.save(survey);
+    }
+
+    public void deleteQuestion(Question question) {
+        questionRepository.deleteById(question.getQuestionId());
     }
 
     public Survey getSurvey(String surveyId) {
@@ -81,12 +132,13 @@ public class SurveyHubService {
         }
     }
 
-    public void createAccount(Account account) {
+    public Account createAccount(Account account) {
         account.setVerified(false);
         String verifyCode = genterateVerifyCode();
         account.setVerifyCode(verifyCode);
         sendVerifyCode(account.getEmail(), verifyCode);
         accountRepository.save(account);
+        return account;
     }
 
     public Account getAccount(String accountId) {
@@ -113,32 +165,36 @@ public class SurveyHubService {
         }
     }
 
-    public void createQuestions(String surveyId, List<Question> questions) {
-        Survey survey = getSurvey(surveyId);
+
+    public void saveAnswers(String surveyId, String accountId, List<Question> questions) {
         for (Question question : questions) {
-            question.setSurvey(survey);
-        }
-        survey.getQuestions().addAll(questions);
-        surveyRepository.save(survey);
-    }
-
-    public void deleteQuestion(String surveyId, Question question) {
-        Survey survey = getSurvey(surveyId);
-        List<Question> questions = new ArrayList<>();
-        for (Question q : survey.getQuestions()) {
-            if (!q.equals(question)) {
-                questions.add(q);
+            Question storedQues = getQuestion(question.getQuestionId());
+            // One question for one answer
+            if (question.getAnswers().size() != 1) {
+                throw new InvalidOperationException("One question can only have one ");
             }
+            Answer newAns = question.getAnswers().get(0);
+            // Update existed answer
+            boolean existed = false;
+            for (Answer answer : storedQues.getAnswers()) {
+                if (answer.getAccountId().equals(newAns.getAccountId())
+                        && answer.getSurveyId().equals(newAns.getSurveyId())
+                        && answer.getQuestion().getQuestionId().equals(question.getQuestionId())) {
+                    answer.setContent(newAns.getContent());
+                    existed = true;
+                    break;
+                }
+            }
+            if (!existed) {
+                newAns.setQuestion(question);
+                newAns.setSubmitted(false);
+                newAns.setSurveyId(surveyId);
+                newAns.setAccountId(accountId);
+                newAns.setQuestion(storedQues);
+                storedQues.getAnswers().add(newAns);
+            }
+            questionRepository.save(storedQues);
         }
-        surveyRepository.save(survey);
-    }
-
-    public void saveAnswer(String questionId, Answer answer) {
-        Question question = getQuestion(questionId);
-        answer.setSubmitted(false);
-        answer.setQuestion(question);
-        question.getAnswers().add(answer);
-        questionRepository.save(question);
     }
 
     public Question getQuestion(String questionId) {
@@ -174,6 +230,7 @@ public class SurveyHubService {
         accountToSurvey.setSubmitted(true);
 
         Survey survey = getSurvey(surveyId);
+        survey.setParticipantNum(survey.getParticipantNum() + 1);
         for (Question question : survey.getQuestions()) {
             question.getAnswers().forEach(answer -> {
                 answer.setSubmitted(true);
@@ -181,6 +238,10 @@ public class SurveyHubService {
         }
         surveyRepository.save(survey);
         accountToSurveyRepository.save(accountToSurvey);
+        if (null != accoundId && !accoundId.isEmpty()) {
+            Account account = getAccount(accoundId);
+            surveyHubEmailService.sendComfirmMail(account.getEmail(), surveyId);
+        }
     }
 
     private boolean hasSubmitted(String surveyId) {
@@ -196,7 +257,12 @@ public class SurveyHubService {
         return false;
     }
 
-    private void sendInvitation(List<Invitation> invitations) {
-
+    public void sendInvitation(String surveyId, List<Invitation> invitations) {
+        Survey survey = getSurvey(surveyId);
+        survey.setInvitationNum(survey.getInvitationNum() + invitations.size());
+        for (Invitation invitation: invitations) {
+            surveyHubEmailService.sendInvitationMail(invitation);
+        }
+        surveyRepository.save(survey);
     }
 }

@@ -136,12 +136,12 @@ GET
 /survey/{surveyId}?accountId=xxx
 Return Survey for surveyor or surveyee in Json, HTTP 200/404
 
-PUT
-/survey?accountId
+POST
+/account/{accountId}/survey
 Return HTTP 200
 
-UPDATE
-/survey/{surveyId}?action={extend/close/publish/unpublish}
+PUT
+/survey/{surveyId}?action={extend/close/publish/unpublish}&dueDate=xxx
 Return HTTP 200
 
 GET
@@ -149,14 +149,14 @@ GET
 Return HTTP 200
 
 PUT
-/question?surveyId=xxx
+/survey{surveyId}/question
 Json Body of question list
 
 DELETE
 /question/{questionId}
 
 PUT
-/answer
+/answer?surveyId=xxx&accountId=yyy
 Return HTTP 200
 
 GET
@@ -168,7 +168,7 @@ POST
 Return HTTP 204
 
 POST
-/invitation?surveyId=xxx&email=yy,zz,xx
+/invitation?surveyId=xxx&emails=aa,bb,cc
 
 POST
 /confirm?email=xxx

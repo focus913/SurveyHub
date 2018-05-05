@@ -33,7 +33,7 @@ public class Account {
     private boolean verified;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    private List<Survey> createSurveys = new ArrayList<>();
+    private List<Survey> createdSurveys = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_to_survey",
@@ -41,12 +41,12 @@ public class Account {
                 inverseJoinColumns = { @JoinColumn(name = "account_id")})
     private List<Survey> joinedSurveys = new ArrayList<>();
 
-    public List<Survey> getCreateSurveys() {
-        return createSurveys;
+    public List<Survey> getCreatedSurveys() {
+        return createdSurveys;
     }
 
     public void setCreateSurveys(List<Survey> createSurveys) {
-        this.createSurveys = createSurveys;
+        this.createdSurveys = createSurveys;
     }
 
     public AccountType getType() {
