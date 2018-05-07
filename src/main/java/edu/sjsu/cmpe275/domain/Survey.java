@@ -29,7 +29,7 @@ public class Survey {
     }
 
     @Id
-    @Column(name = "sruvey_id")
+    @Column(name = "survey_id")
     private String surveyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
