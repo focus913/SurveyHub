@@ -98,7 +98,8 @@ $(document).ready(function() {
 	$("#userVerificationForm").submit(function(e) {
 		e.preventDefault();
 		var url = "/account/verify"
-        var next = "/signup"
+        // var next = "/signup"
+        var next = "/account/surveyor"
 		verify(url, next);
 	});
 	

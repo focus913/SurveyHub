@@ -297,7 +297,7 @@ color:white;
         function logOutLibrarian() {	
         	$.ajax({
         		type : "GET",
-        		url : "/logout",	
+        		url : "/signup",
         		success : function(data) {
         		},
         		error: function(error){
@@ -308,7 +308,7 @@ color:white;
         		},
         		statusCode : {
         			200 : function() {
-        				window.location = '/signup';
+        				window.location = "/signup";
         			},
         			400 : function() {
         				
