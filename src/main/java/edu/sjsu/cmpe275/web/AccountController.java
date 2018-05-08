@@ -22,6 +22,7 @@ public class AccountController {
     private final static String LOGIN_USER_NAME = "login_user_name";
     private final static String SURVEYOR_PAGE = "surveyor_page";
     private final static String SURVEYEE_PAGE = "surveyee_page";
+    private final static String CREATE_SURVEY_PATE = "create_survey";
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/signup")
@@ -84,5 +85,11 @@ public class AccountController {
         System.out.println("POST survey");
         String accountId = (String) httpSession.getAttribute(LOGIN_USER_KEY);
         surveyHubService.createSurvey(accountId, survey);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(path = "/createsurvey")
+    public String getCreateSurveyPage() {
+        return CREATE_SURVEY_PATE;
     }
 }
