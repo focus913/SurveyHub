@@ -5,6 +5,7 @@ import edu.sjsu.cmpe275.domain.Survey;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
 import edu.sjsu.cmpe275.service.SurveyHubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class SurveyController {
     @Autowired
     SurveyHubService surveyHubService;
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/question")
     public void saveQuestion(@ModelAttribute Question question, HttpSession httpSession) {
         String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
