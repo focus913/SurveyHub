@@ -190,8 +190,9 @@ public class SurveyHubService {
     }
 
 
-    public void saveAnswers(String surveyId, String accountId, List<Question> questions) {
-        for (Question question : questions) {
+    public void saveAnswers(List<Answer> answers) {
+        answerRepository.saveAll(answers);
+        /*for (Question question : questions) {
             Question storedQues = getQuestion(question.getQuestionId());
             // One question for one answer
             if (question.getAnswers().size() != 1) {
@@ -218,7 +219,7 @@ public class SurveyHubService {
                 storedQues.getAnswers().add(newAns);
             }
             questionRepository.save(storedQues);
-        }
+        }*/
     }
 
     public Question getQuestion(String questionId) {

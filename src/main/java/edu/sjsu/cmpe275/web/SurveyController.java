@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
+import edu.sjsu.cmpe275.domain.Answer;
+import edu.sjsu.cmpe275.domain.Invitation;
 import edu.sjsu.cmpe275.domain.Question;
 import edu.sjsu.cmpe275.domain.Survey;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
@@ -31,7 +34,7 @@ public class SurveyController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/question")
-    public void saveQuestion(@ModelAttribute Question question, HttpSession httpSession) {
+    public void saveQuestion(@RequestBody Question question, HttpSession httpSession) {
         String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
         List<Question> questions = new ArrayList<>();
         questions.add(question);
@@ -42,6 +45,12 @@ public class SurveyController {
     public void saveQuestions(@PathVariable("surveyId") String surveyId,
                               @RequestBody List<Question> questions) {
         surveyHubService.saveQuestions(surveyId, questions);
+    }
+
+    @PostMapping(path = "/publish")
+    public void publishSurvey(HttpSession httpSession) {
+        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        surveyHubService.updateSurvyStatus(surveyId, Survey.Action.PUBLISH, null);
     }
 
     @PutMapping(path = "/{surveyId}")
@@ -69,6 +78,22 @@ public class SurveyController {
     @GetMapping(path = "/{surveyId}")
     public @ResponseBody Survey getSurvey(@PathVariable("surveyId") String surveyId) {
         return surveyHubService.getSurvey(surveyId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(path = "/answer")
+    public void saveAnswer(@ModelAttribute Answer answer) {
+        List<Answer> answers = new ArrayList<>();
+        answers.add(answer);
+        surveyHubService.saveAnswers(answers);
+    }
+
+    @PostMapping(path = "/invitation")
+    public void sendInvitation(@ModelAttribute Invitation invitation, HttpSession httpSession) {
+        List<Invitation> invitations = new ArrayList<>();
+        invitations.add(invitation);
+        String surveyId = (String ) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        surveyHubService.sendInvitation(surveyId, invitations);
     }
 
 }
