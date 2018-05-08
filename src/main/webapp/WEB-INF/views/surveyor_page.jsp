@@ -2,7 +2,6 @@
 <head>
     <meta charset="utf-8"/>
   <!-- Material Design fonts -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
@@ -21,9 +20,9 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-      
-      
-      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
       
       
@@ -331,7 +330,8 @@ color:white;
         		}
         	});
         }
-        
+
+
         $("#createsurvey").submit(function(e) {
             e.preventDefault();
             if (document.getElementById('surveyName').value == '') {
@@ -343,6 +343,7 @@ color:white;
         });
 
         function createSurvey() {
+            alert($("#createsurvey").serialize());
             $.ajax({
                 type: "POST",
                 url: "createsurvey",
@@ -357,7 +358,7 @@ color:white;
                 },
                 statusCode : {
                     200 : function() {
-                        window.location = 'create_survey';
+                        window.location = '/surveyor/create_survey';
                     },
                     400 : function() {
 
@@ -379,6 +380,7 @@ color:white;
                 }
             });
         }
+
 		
 	});
 
@@ -601,17 +603,17 @@ color:white;
                   Search
               </button>
           </form>-->
-          <form id="createsurvey" class="form-inline">
+          <form class="form-inline" id="createsurvey">
               <div class="form-group">
                   <label for="surveyName" class="bmd-label-floating">Title</label>
-                  <input type="text" class="form-control" id="surveyName">
+                  <input type="text" class="form-control" id="surveyName" name="surveyName">
               </div>
               <div class="form-group">
-                  Date: <input type="text" id="expireTime">
+                  Date: <input type="text" id="expireTime" name="expireTime">
               </div>
               <div class="form-group">
                   <label for="surveyType" class="bmd-label-floating">Survey Type</label>
-                  <select class="form-control" id="surveyType">
+                  <select class="form-control" id="surveyType" name="surveyType">
                       <option>General</option>
                       <option>Invation-Only</option>
                       <option>Unique</option>
