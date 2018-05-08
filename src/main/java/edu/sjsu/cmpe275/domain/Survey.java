@@ -45,7 +45,7 @@ public class Survey {
     private Account creator;
 
     @Column(name = "survey_type", nullable = false)
-    private SurveyType type;
+    private SurveyType surveyType;
 
     @Column(name = "status", nullable = false)
     private SurveyStatus status;
@@ -74,8 +74,8 @@ public class Survey {
         this.surveyId = surveyId;
     }
 
-    public void setType(SurveyType type) {
-        this.type = type;
+    public void setSurveyType(SurveyType type) {
+        this.surveyType = type;
     }
 
     public void setStatus(SurveyStatus status) {
@@ -94,9 +94,9 @@ public class Survey {
         this.participants = participants;
     }
 
-    public SurveyType getType() {
+    public SurveyType getSurveyType() {
 
-        return type;
+        return surveyType;
     }
 
     public SurveyStatus getStatus() {
