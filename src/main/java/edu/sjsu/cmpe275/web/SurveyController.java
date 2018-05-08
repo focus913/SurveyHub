@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +23,18 @@ public class SurveyController {
     private final static String PUBLISH = "publish";
     private final static String UNPUBLISH = "unpublish";
     private final static String EXTEND = "extend";
+    private final static String CURRENT_SURVEY_ID = "current_survey_id";
 
     @Autowired
     SurveyHubService surveyHubService;
+
+    @PostMapping(path = "/question")
+    public void saveQuestion(@ModelAttribute Question question, HttpSession httpSession) {
+        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        List<Question> questions = new ArrayList<>();
+        questions.add(question);
+        surveyHubService.saveQuestions(surveyId, questions);
+    }
 
     @PutMapping(path = "/{surveyId}/question", produces = {"application/json"})
     public void saveQuestions(@PathVariable("surveyId") String surveyId,

@@ -20,9 +20,10 @@ public class AccountController {
     private final static String ACCOUNT_VERIFY_PAGE = "account_verify";
     private final static String LOGIN_USER_KEY = "login_user_key";
     private final static String LOGIN_USER_NAME = "login_user_name";
+    private final static String CURRENT_SURVEY_ID = "current_survey_id";
     private final static String SURVEYOR_PAGE = "surveyor_page";
     private final static String SURVEYEE_PAGE = "surveyee_page";
-    private final static String CREATE_SURVEY_PATE = "create_survey";
+    private final static String CREATE_SURVEY_PAGE = "create_survey";
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/signup")
@@ -84,12 +85,13 @@ public class AccountController {
                         @ModelAttribute Survey survey) {
         System.out.println("POST survey");
         String accountId = (String) httpSession.getAttribute(LOGIN_USER_KEY);
+        httpSession.setAttribute(CURRENT_SURVEY_ID, survey.getSurveyId());
         surveyHubService.createSurvey(accountId, survey);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/createsurvey")
     public String getCreateSurveyPage() {
-        return CREATE_SURVEY_PATE;
+        return CREATE_SURVEY_PAGE;
     }
 }
