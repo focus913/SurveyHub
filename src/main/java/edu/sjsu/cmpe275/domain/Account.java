@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +12,18 @@ import java.util.UUID;
 public class Account {
     public enum AccountType {
         SURVEYOR,
-        SURVEYEE
+        SURVEYEE,
     }
 
     @Id
     @Column(name = "account_id")
     private String accountId;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -24,7 +32,7 @@ public class Account {
     private String password;
 
     @Column(name = "type", nullable = false)
-    private AccountType type;
+    private int type;
 
     @Column(name = "verify_code", nullable = false)
     private String verifyCode;
@@ -33,12 +41,14 @@ public class Account {
     private boolean verified;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    @JsonIgnore
     private List<Survey> createdSurveys = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_to_survey",
                 joinColumns = { @JoinColumn(name = "survey_id")},
                 inverseJoinColumns = { @JoinColumn(name = "account_id")})
+    @JsonIgnore
     private List<Survey> joinedSurveys = new ArrayList<>();
 
     public List<Survey> getCreatedSurveys() {
@@ -49,7 +59,7 @@ public class Account {
         this.createdSurveys = createSurveys;
     }
 
-    public AccountType getType() {
+    public int getType() {
         return type;
     }
 
@@ -93,7 +103,7 @@ public class Account {
         this.joinedSurveys = surveys;
     }
 
-    public void setType(AccountType type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -103,6 +113,26 @@ public class Account {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setCreatedSurveys(List<Survey> createdSurveys) {
+        this.createdSurveys = createdSurveys;
     }
 
     @Override

@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.MessagingException;
+
 @ControllerAdvice
 public class SurveyHubExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Exception>
     handleOtherException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AccountNotExistException.class)
@@ -56,6 +58,12 @@ public class SurveyHubExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(QuestionNotExistException.class)
     public final ResponseEntity<QuestionNotExistException>
     handleVerifyFailedException(QuestionNotExistException ex, WebRequest request) {
+        return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SurveyHubException.class)
+    public final ResponseEntity<SurveyHubException>
+    handleVerifyFailedException(SurveyHubException ex, WebRequest request) {
         return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
     }
 }

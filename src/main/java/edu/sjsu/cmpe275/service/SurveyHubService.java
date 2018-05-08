@@ -2,11 +2,9 @@ package edu.sjsu.cmpe275.service;
 
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.*;
-import jdk.net.SocketFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @Component("SurveyHubService")
@@ -74,24 +72,6 @@ public class SurveyHubService {
         surveyRepository.save(survey);
     }
 
-    public void publishSurvey(String surveyId) {
-        Survey survey = getSurvey(surveyId);
-        if (survey.getStatus() != Survey.SurveyStatus.EDITTING) {
-            throw new InvalidOperationException("Survey " + surveyId + " already published");
-        }
-        survey.setStatus(Survey.SurveyStatus.PUBLISHED);
-        surveyRepository.save(survey);
-    }
-
-    public void unpublishSurvey(String surveyId) {
-        Survey survey = getSurvey(surveyId);
-        if (survey.getStatus() == Survey.SurveyStatus.CLOSED) {
-            throw new InvalidOperationException("Closed survey can't be unpublished");
-        }
-        survey.setStatus(Survey.SurveyStatus.EDITTING);
-        surveyRepository.save(survey);
-    }
-
     public void deleteQuestion(Question question) {
         questionRepository.deleteById(question.getQuestionId());
     }
@@ -118,13 +98,10 @@ public class SurveyHubService {
                 survey.setExpireTime(newDueDate);
                 break;
             case PUBLISH:
-                survey.setStatus(Survey.SurveyStatus.PUBLISHED);
+                publishSurvey(surveyId);
                 break;
             case UNPUBLISH:
-                if (hasSubmitted(surveyId)) {
-                    throw new SurveyUnwritableException("Survey " + surveyId + " has been published");
-                }
-                survey.setStatus(Survey.SurveyStatus.EDITTING);
+                unpublishSurvey(surveyId);
                 break;
             default:
                     throw new InvalidOperationException("Unsupported exception");
@@ -132,16 +109,46 @@ public class SurveyHubService {
         }
     }
 
-    public Account createAccount(Account account) {
+    private void publishSurvey(String surveyId) {
+        Survey survey = getSurvey(surveyId);
+        if (survey.getStatus() != Survey.SurveyStatus.EDITTING) {
+            throw new InvalidOperationException("Survey " + surveyId + " already published");
+        }
+        survey.setStatus(Survey.SurveyStatus.PUBLISHED);
+        surveyRepository.save(survey);
+    }
+
+    private void unpublishSurvey(String surveyId) {
+        Survey survey = getSurvey(surveyId);
+        if (survey.getStatus() == Survey.SurveyStatus.CLOSED) {
+            throw new InvalidOperationException("Closed survey can't be unpublished");
+        }
+        if (survey.getParticipantNum() > 0) {
+            throw new InvalidOperationException("Taken survey can't be unpublished");
+        }
+        survey.setStatus(Survey.SurveyStatus.EDITTING);
+        surveyRepository.save(survey);
+    }
+
+    public void createAccount(Account account) {
         account.setVerified(false);
         String verifyCode = genterateVerifyCode();
         account.setVerifyCode(verifyCode);
-        sendVerifyCode(account.getEmail(), verifyCode);
         accountRepository.save(account);
-        return account;
+        System.out.println("Send verify email");
+        surveyHubEmailService.sendVerificationCode(account.getEmail(), verifyCode);
+        System.out.println("Send verify email end");
     }
 
-    public Account getAccount(String accountId) {
+    public Account getAccountByEmail(String email) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
+        if (!maybeAccount.isPresent()) {
+            throw new AccountNotExistException("Account " + email + " not exist");
+        }
+        return maybeAccount.get();
+    }
+
+    public Account getAccountById(String accountId) {
         Optional<Account> maybeAccount = accountRepository.findById(accountId);
         if (!maybeAccount.isPresent()) {
             throw new AccountNotExistException("Account " + accountId + " not exist");
@@ -149,8 +156,20 @@ public class SurveyHubService {
         return maybeAccount.get();
     }
 
-    public void sendVerifyCode(String email, String code) {
+    public Account loginAccount(String email, String password) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
+        if (!maybeAccount.isPresent()) {
+            throw new InvalidOperationException("Invalid account name or password");
+        }
+        Account account = maybeAccount.get();
+        if (!account.isVerified()) {
+            throw new InvalidOperationException("Account is not verified");
+        }
 
+        if (null == password || !password.equals(account.getPassword())) {
+            throw new InvalidOperationException("Invalid account name or password");
+        }
+        return account;
     }
 
     private String genterateVerifyCode() {
@@ -158,11 +177,14 @@ public class SurveyHubService {
                    .substring(0, 7).toUpperCase();
     }
 
-    public void verifyAccount(String accountId, String code) {
-        Account account = getAccount(accountId);
+    public void verifyAccount(String email, String code) {
+        Account account = getAccountByEmail(email);
+        System.out.println("Account Code " + account.getVerifyCode() + " User code: " + code);
         if (!account.getVerifyCode().equals(code)) {
             throw new VerifyFailedException("Account verify failed");
         }
+        account.setVerified(true);
+        accountRepository.save(account);
     }
 
 
@@ -239,8 +261,8 @@ public class SurveyHubService {
         surveyRepository.save(survey);
         accountToSurveyRepository.save(accountToSurvey);
         if (null != accoundId && !accoundId.isEmpty()) {
-            Account account = getAccount(accoundId);
-            surveyHubEmailService.sendComfirmMail(account.getEmail(), surveyId);
+            Account account = getAccountById(accoundId);
+            surveyHubEmailService.sendCreateSurveyComfirmMail(account.getEmail(), surveyId);
         }
     }
 

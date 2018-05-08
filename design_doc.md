@@ -125,7 +125,7 @@ GET
 Return All Surveys in Json, HTTP 200
 
 POST
-/account
+/account?email=xxx&password=yyy&type=xxx
 Return HTTP 204
 
 POST
