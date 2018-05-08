@@ -342,11 +342,10 @@ color:white;
             }
         });
 
-        function createSurvey(title) {
-            title = document.getElementById("surveyName");
+        function createSurvey() {
             $.ajax({
                 type: "POST",
-                url: "/createsurvey",
+                url: "createsurvey",
                 data: $("#createsurvey").serialize(),
                 success: function (data) {
                 },
@@ -358,7 +357,7 @@ color:white;
                 },
                 statusCode : {
                     200 : function() {
-                        window.location = '/createsurvey';
+                        window.location = 'create_survey';
                     },
                     400 : function() {
 
@@ -384,6 +383,13 @@ color:white;
 	});
 
 </script>
+  <script>
+      $( function() {
+          $( "#expireTime" ).datepicker();
+      } );
+  </script>
+
+
   <!-- Simple header with scrollable tabs. -->
        
   
@@ -600,8 +606,19 @@ color:white;
                   <label for="surveyName" class="bmd-label-floating">Title</label>
                   <input type="text" class="form-control" id="surveyName">
               </div>
+              <div class="form-group">
+                  Date: <input type="text" id="expireTime">
+              </div>
+              <div class="form-group">
+                  <label for="surveyType" class="bmd-label-floating">Survey Type</label>
+                  <select class="form-control" id="surveyType">
+                      <option>General</option>
+                      <option>Invation-Only</option>
+                      <option>Unique</option>
+                  </select>
+              </div>
               <span class="form-group bmd-form-group">
-                  <a href="createsurvey" class="btn btn-primary" role="button">Create Survey</a>
+                  <button type="submit">Create</button>
               </span>
           </form>
 
