@@ -343,7 +343,6 @@ color:white;
         });
 
         function createSurvey() {
-            alert($("#createsurvey").serialize());
             $.ajax({
                 type: "POST",
                 url: "createsurvey",
@@ -358,7 +357,7 @@ color:white;
                 },
                 statusCode : {
                     200 : function() {
-                        window.location = '/surveyor/create_survey';
+                        window.location = '/account/createsurvey';
                     },
                     400 : function() {
 
