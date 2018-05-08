@@ -53,7 +53,7 @@ public class Survey {
     @Column(name = "create_time", nullable = false)
     private Date createTime;
 
-    @DateTimeFormat( pattern = "yyyy-MM-dd")
+    @DateTimeFormat( pattern = "MM/dd/yyyy")
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
 
