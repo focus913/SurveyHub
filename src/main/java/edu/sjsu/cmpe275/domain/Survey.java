@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class Survey {
     @Column(name = "create_time", nullable = false)
     private Date createTime;
 
+    @DateTimeFormat( pattern = "yyyy-MM-dd")
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
 
@@ -160,6 +162,8 @@ public class Survey {
 
     public Survey() {
         this.surveyId = "survey_" + UUID.randomUUID().toString().replaceAll("-", "");
+        this.status = SurveyStatus.EDITTING;
         this.participantNum = 0;
+        this.invitationNum = 0;
     }
 }

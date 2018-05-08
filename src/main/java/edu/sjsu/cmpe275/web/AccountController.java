@@ -54,6 +54,7 @@ public class AccountController {
         System.out.println("POST login page");
         Account account = surveyHubService.loginAccount(email, password);
         httpSession.setAttribute(LOGIN_USER_NAME, account.getEmail());
+        httpSession.setAttribute(LOGIN_USER_KEY, account.getAccountId());
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -76,7 +77,7 @@ public class AccountController {
         return surveyHubService.getAccountByEmail(email);
     }
 
-    @PostMapping(path = "/survey", produces = {"application/json"})
+    @PostMapping(path = "/createsurvey", produces = {"application/json"})
     public @ResponseBody
     void createSurvey(HttpSession httpSession,
                         @ModelAttribute Survey survey) {

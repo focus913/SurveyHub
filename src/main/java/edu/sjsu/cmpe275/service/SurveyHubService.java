@@ -139,9 +139,7 @@ public class SurveyHubService {
         String verifyCode = genterateVerifyCode();
         account.setVerifyCode(verifyCode);
         accountRepository.save(account);
-        System.out.println("Send verify email");
         surveyHubEmailService.sendVerificationCode(account.getEmail(), verifyCode);
-        System.out.println("Send verify email end");
     }
 
     public Account getAccountByEmail(String email) {
