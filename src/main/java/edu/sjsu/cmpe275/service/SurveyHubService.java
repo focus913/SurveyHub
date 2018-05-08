@@ -68,7 +68,7 @@ public class SurveyHubService {
         for (Question toAdd : added) {
             toAdd.setSurvey(survey);
         }
-        survey.getQuestions().addAll(questions);
+        survey.getQuestions().addAll(added);
         surveyRepository.save(survey);
     }
 
