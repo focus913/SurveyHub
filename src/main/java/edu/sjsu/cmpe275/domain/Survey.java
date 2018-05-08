@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe275.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,8 +35,12 @@ public class Survey {
     @Column(name = "survey_id")
     private String surveyId;
 
+    @Column(name = "survey_name")
+    private String surveyName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnore
     private Account creator;
 
     @Column(name = "survey_type", nullable = false)
@@ -58,6 +65,7 @@ public class Survey {
     List<Question> questions = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "joinedSurveys")
+    @JsonIgnore
     List<Account> participants = new ArrayList<>();
 
     public void setSurveyId(String surveyId) {
@@ -140,6 +148,14 @@ public class Survey {
 
     public void setInvitationNum(int invitationNum) {
         this.invitationNum = invitationNum;
+    }
+
+    public String getSurveyName() {
+        return surveyName;
+    }
+
+    public void setSurveyName(String name) {
+        this.surveyName = name;
     }
 
     public Survey() {

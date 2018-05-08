@@ -76,11 +76,12 @@ public class AccountController {
         return surveyHubService.getAccountByEmail(email);
     }
 
-    @PostMapping(path = "/{accountId}/survey", produces = {"application/json"})
+    @PostMapping(path = "/survey", produces = {"application/json"})
     public @ResponseBody
-    Survey createSurvey(@PathVariable("accountId") String accountId,
-                        @RequestBody Survey survey) {
-        System.out.println("GET survey");
-        return surveyHubService.createSurvey(accountId, survey);
+    void createSurvey(HttpSession httpSession,
+                        @ModelAttribute Survey survey) {
+        System.out.println("POST survey");
+        String accountId = (String) httpSession.getAttribute(LOGIN_USER_KEY);
+        surveyHubService.createSurvey(accountId, survey);
     }
 }

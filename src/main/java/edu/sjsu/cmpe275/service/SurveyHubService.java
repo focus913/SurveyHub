@@ -131,6 +131,10 @@ public class SurveyHubService {
     }
 
     public void createAccount(Account account) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(account.getEmail());
+        if (maybeAccount.isPresent()) {
+            throw new InvalidOperationException("Account with " + account.getEmail() + " already existed");
+        }
         account.setVerified(false);
         String verifyCode = genterateVerifyCode();
         account.setVerifyCode(verifyCode);
