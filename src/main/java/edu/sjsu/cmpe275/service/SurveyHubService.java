@@ -56,7 +56,7 @@ public class SurveyHubService {
             boolean existed = false;
             for (Question existedQuestion : survey.getQuestions()) {
                 if (existedQuestion.getQuestionId().equals(q.getQuestionId())) {
-                    existedQuestion.setContent(q.getContent());
+                    existedQuestion.setQuestionContent(q.getQuestionContent());
                     existed = true;
                     break;
                 }

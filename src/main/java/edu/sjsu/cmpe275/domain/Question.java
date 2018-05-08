@@ -25,7 +25,7 @@ public class Question {
 
     @Column(name = "content", nullable = true)
     @Lob
-    private String content;
+    private String questionContent;
 
     public String getQuestionId() {
         return questionId;
@@ -43,12 +43,12 @@ public class Question {
         this.survey = survey;
     }
 
-    public String getContent() {
-        return content;
+    public String getQuestionContent() {
+        return questionContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setQuestionContent(String questionContent) {
+        this.questionContent = questionContent;
     }
 
     public List<Answer> getAnswers() {
