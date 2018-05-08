@@ -331,6 +331,55 @@ color:white;
         		}
         	});
         }
+        
+        $("#createsurvey").submit(function(e) {
+            e.preventDefault();
+            if (document.getElementById('surveyName').value == '') {
+                alert("Please enter name of the survey");
+            }
+            else {
+                createSurvey();
+            }
+        });
+
+        function createSurvey(title) {
+            title = document.getElementById("surveyName");
+            $.ajax({
+                type: "POST",
+                url: "/createsurvey",
+                data: $("#createsurvey").serialize(),
+                success: function (data) {
+                },
+                error: function (error) {
+                    window.errorMsg = JSON.parse(error.responseText);
+
+                    showError(errorMsg.errorMessage);
+                    console.log(error);
+                },
+                statusCode : {
+                    200 : function() {
+                        window.location = '/createsurvey';
+                    },
+                    400 : function() {
+
+                    },
+                    500 : function() {
+
+                    },
+                    404 : function() {
+
+
+                    },
+                    409 : function() {
+                    }
+                },
+                complete : function(e) {
+                    if (e.status == 200) {
+
+                    }
+                }
+            });
+        }
 		
 	});
 
@@ -530,22 +579,32 @@ color:white;
       <section class="mdl-layout__tab-panel" id="scroll-tab-2">
       <!-- Your content goes here -->
       <div class="page-content" >
-	               
-	
-	<div style="margin-left:470px;margin-bottom:40px;">Search By Author,Keywords,Title, Publisher, Year Or ISBN</div>
+          <!--
+          <div style="margin-left:470px;margin-bottom:40px;">Search By Author,Keywords,Title, Publisher, Year Or ISBN</div>
           <form id="searchform">
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-    <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
-      <i class="material-icons">search</i>
-    </label>
-    <div class="mdl-textfield__expandable-holder">
-      <input class="mdl-textfield__input" type="text" id="sample6">
-      <label class="mdl-textfield__label" for="sample-expandable">Expandable Input</label>
-    </div>
-    <button id="searchbutton"onclick="searchresults();return false;"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-    Search
-    </button>
-    </form>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                  <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                      <i class="material-icons">search</i>
+                  </label>
+              </div>
+              <div class="mdl-textfield__expandable-holder">
+                  <input class="mdl-textfield__input" type="text" id="sample6">
+                  <label class="mdl-textfield__label" for="sample-expandable">Expandable Input</label>
+              </div>
+              <button id="searchbutton"onclick="searchresults();return false;"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  Search
+              </button>
+          </form>-->
+          <form id="createsurvey" class="form-inline">
+              <div class="form-group">
+                  <label for="surveyName" class="bmd-label-floating">Title</label>
+                  <input type="text" class="form-control" id="surveyName">
+              </div>
+              <span class="form-group bmd-form-group">
+                  <a href="createsurvey" class="btn btn-primary" role="button">Create Survey</a>
+              </span>
+          </form>
+
 
  <script>
  function searchresults(){
