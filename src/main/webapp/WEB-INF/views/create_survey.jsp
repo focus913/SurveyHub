@@ -42,17 +42,28 @@
         var question_name = 1;
         function submitQuestion() {
 
-            var question = {
-                title: document.getElementById("questionTitle").value,
-                type: document.getElementById("surveyType").value,
-                name: question_name,
-                choices: [
-                    document.getElementById("choice1").value,
-                    document.getElementById("choice2").value,
-                    document.getElementById("choice3").value,
-                    document.getElementById("choice4").value
-                ]
-            };
+            if (document.getElementById("surveyType").value == "rating") {
+                var question = {
+                    title: document.getElementById("questionTitle").value,
+                    type: document.getElementById("surveyType").value,
+                    name: question_name,
+                    minRateDescription: "Bad",
+                    maxRateDescription: "Great"
+                };
+            } else {
+                var question = {
+                    title: document.getElementById("questionTitle").value,
+                    type: document.getElementById("surveyType").value,
+                    name: question_name,
+                    choices: [
+                        document.getElementById("choice1").value,
+                        document.getElementById("choice2").value,
+                        document.getElementById("choice3").value,
+                        document.getElementById("choice4").value
+                    ]
+                };
+            }
+
 
             /*
             {"title":"Choose a color",
@@ -252,8 +263,9 @@
                     <label for="surveyType" class="bmd-label-floating">Question Type</label>
                     <select class="form-control" id="surveyType" name="surveyType">
                         <option value="text">Short Answer</option>
-                        <option value="radiogroup">Yes or No</option>
+                        <option value="radio">Yes or No</option>
                         <option value="checkbox">Multiple Choice</option>
+                        <option value="rating">Rating</option>
                     </select>
                 </div>
                 <div class="form-group">

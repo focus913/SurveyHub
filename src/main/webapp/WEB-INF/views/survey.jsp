@@ -22,15 +22,14 @@
     var cjson = [];
 
     <c:forEach items="${surveyGeneral.questions}" var="question">
-     console.log(${question.questionContent});
+    console.log(${question.questionContent});
 
-     cjson.push(${question.questionContent});
-     console.log(cjson);
+    cjson.push(${question.questionContent});
+    console.log(cjson);
 
     </c:forEach>
 
-    cjson[0]["type"] = "checkbox";
-    cjson[0]["choices"] = cjson[0]["choice"];
+
     console.log(cjson);
 
 
@@ -58,56 +57,81 @@
         var el = document.getElementById(options.name);
         if (el) {
             el.value = options.value;
+
+            console.log(el);
         }
     };
+
+
 
     Survey
         .StylesManager
         .applyTheme("default");
 
-/*
-    var json = {
-        questions: [{
-            type: "checkbox",
-            name: "car",
-            title: "What car are you driving?",
-            isRequired: true,
-            colCount: 4,
-            choices: [
-                "None",
-                "Ford",
-                "Vauxhall",
-                "Volkswagen",
-                "Nissan",
-                "Audi",
-                "Mercedes-Benz",
-                "BMW",
-                "Peugeot",
-                "Toyota",
-                "Citroen"
-            ]
-        }]
-    };
-*/
+    /*
+        var json = {
+            questions: [{
+                type: "checkbox",
+                name: "car",
+                title: "What car are you driving?",
+                isRequired: true,
+                colCount: 4,
+                choices: [
+                    "None",
+                    "Ford",
+                    "Vauxhall",
+                    "Volkswagen",
+                    "Nissan",
+                    "Audi",
+                    "Mercedes-Benz",
+                    "BMW",
+                    "Peugeot",
+                    "Toyota",
+                    "Citroen"
+                ]
+            }]
+        };
+    */
 
     window.survey = new Survey.Model(djson);
+    var sResult = [];
+
+    survey.onValueChanged.add(function (sender, options) {
+        var mySurvey = sender;
+        console.log(sender);
+        console.log("options", options);
+        var questionName = options.name;
+        var newValue = options.value;
+        console.log("questionName", questionName);
+
+        console.log("newValue", newValue);
+
+        console.log("sender data is ", sender.data);
+        sResult = sender.data;
+    });
+
 
 
     survey
         .onComplete
-        .add(function(result) {
-            console.log("inside survey add");
+        .add(function () {
+            console.log("sResult is ", sResult);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/survey/answer");
+            xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            xhr.send(JSON.stringify(sResult));
 
             document
-                .querySelector('#surveyResult');
-                /*.innerHTML = "result: " + JSON.stringify(result.data);*/
+                .querySelector('#surveyResult')
+            /*.innerHTML = "result: " + JSON.stringify(result.data);*/
         });
 
-/*    survey.data = {
-        name: 'John Doe',
-        email: 'johndoe@nobody.com',
-        car: ['Ford']
-    };*/
+    /*    survey.data = {
+            name: 'John Doe',
+            email: 'johndoe@nobody.com',
+            car: ['Ford']
+        };*/
 
     $("#surveyElement").Survey({
         model: survey,
