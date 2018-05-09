@@ -404,137 +404,141 @@ color:white;
          <button id="logout"class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();" style="width:200px;">
       Log Out
     </button>
-        <span class="mdl-layout-title">SJSU Library</span>
+          <span class="mdl-layout-title">SJSU Library</span>
       </div>
       <!-- Tabs -->
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-        <a href="#scroll-tab-1" class="mdl-layout__tab is-active">ADD</a>
-
-        <a href="#scroll-tab-2" class="mdl-layout__tab">Search</a>
-        <a href="#scroll-tab-3" class="mdl-layout__tab">Search By Librarian</a>
-        
+          <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Surveys</a>
+          <a href="#scroll-tab-2" class="mdl-layout__tab">Create</a>
+          <a href="#scroll-tab-3" class="mdl-layout__tab">Search By Librarian</a>
+          <a href="#scroll-tab-4" class="mdl-layout__tab">Add</a>
 
       </div>
-      
     </header>
+      <main class="mdl-layout__content" style="height:800px;">
+          <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+              <p>Hello</p>
 
-    <main class="mdl-layout__content" style="height:800px;">
-                    
-    
-      <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-        <div class="page-content">
-      
+              <script>
+                  function getSurvey() {
+                      var question = $('#questions');
+                      $.ajax({
+                          type: "GET",
+                          url: "/survey/getSurvey",
+                          success: function (data) {
+                              var output = "<table><thead><tr><th>No</th><th>Survey Name</th></thead><thbody>";
+                              for (var i in data)
+                              {
+                                  output += "<tr><td>" + i + "</td><td>" + data[i] + "</td></tr>";
+                              }
+                              output += "</tbody></table>";
 
-          <!--  TAB 1 ADD ............................ -->
-             
-          <!--<p>Enter Date: <input type = "text" id = "datepicker"></p> -->
-          <div class="container">
-    <div class="row">
-         <button style="float:right;" id="datebutton"onclick="setDate();return false;"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Update Date</button> 
-    
-        <div class='col-sm-3' style="float:right;">
-            <input type='text' class="form-control" id='datetimepicker4' />
+                              question.html(output);
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                              alert("error");
+                          }
+                      });
+                  }
+              </script>
+
+              <button type="submit" onclick="getSurvey()">List Survey</button>
+
+
+          </section>
+
+
+          <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+              <div class="page-content">
+                  <!--  TAB 1 ADD ............................ -->
+                  <!--<p>Enter Date: <input type = "text" id = "datepicker"></p> -->
+                  <div class="container">
+                      <div class="row">
+                          <button style="float:right;" id="datebutton"onclick="setDate();return false;"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Update Date</button>
+                          <div class='col-sm-3' style="float:right;">
+                              <input type='text' class="form-control" id='datetimepicker4' />
+                          </div>
+                          <script type="text/javascript">
             
-        </div>
-        
-        <script type="text/javascript">
-            
-           
-        </script>
-    </div>
-</div>
-    
-          <main class="mdl-layout__content" id="mainform">
-    		<div class="mdl-card mdl-shadow--6dp">
-    		<div id="imgHolder"></div>
-   <form id="addBookForm">
-						<div class="mdl-card__supporting-text">
+                          </script>
+                      </div>
+                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="isbn"
-									name="ISBN"> <label class="mdl-textfield__label"
-									for="isbn">ISBN</label>
-							</div>
+                  <main class="mdl-layout__content" id="mainform">
+                      <div class="mdl-card mdl-shadow--6dp">
+                          <div id="imgHolder"></div>
+                          <form id="addBookForm">
+                              <div class="mdl-card__supporting-text">
+                                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                      <input class="mdl-textfield__input" type="text" id="isbn" name="ISBN">
+                                      <label class="mdl-textfield__label" for="isbn">ISBN</label>
+                                  </div>
+                                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                      <input class="mdl-textfield__input" type="text" id="author" name="author" placeholder="">
+                                      <label class="mdl-textfield__label" for="email" id="authorLabel">Author</label>
+                                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="author"
-									name="author" placeholder=""> <label
-									class="mdl-textfield__label" for="email" id="authorLabel">Author</label>
-							</div>
+                                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                      <input class="mdl-textfield__input" type="text" id="title" name="title" placeholder="">
+                                      <label class="mdl-textfield__label" for="password">Title</label>
+                                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="title"
-									name="title" placeholder=""> <label
-									class="mdl-textfield__label" for="password">Title</label>
-							</div>
+                                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                      <input class="mdl-textfield__input" type="text" id="callnumber"
+                                        name="callNumber" placeholder=""> <label
+                                        class="mdl-textfield__label" for="id">Call Number</label>
+                                  </div>
+                                  <div
+                                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="publisher"
+                                        name="publisher" placeholder=""> <label
+                                        class="mdl-textfield__label" for="email">Publisher</label>
+                                  </div>
 
+                                  <div
+                                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="year"
+                                        pattern="^[0-9]{4}$" maxlength="4" name="yearOfPublication"
+                                        placeholder=""> <label class="mdl-textfield__label"
+                                        for="year">Year of Publication</label> <span
+                                        class="mdl-textfield__error">Enter a valid Year</span>
+                                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="callnumber"
-									name="callNumber" placeholder=""> <label
-									class="mdl-textfield__label" for="id">Call Number</label>
+                                  <div
+                                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="Location"
+                                        name="location" placeholder=""> <label
+                                        class="mdl-textfield__label" for="email">Location</label>
+                                  </div>
 
-							</div>
+                                  <div
+                                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="copies" pattern="^[0-9]*$"
+                                        name="numberOfCopies" placeholder=""> <label
+                                        class="mdl-textfield__label" for="email">Number of
+                                        Copies</label><span
+                                        class="mdl-textfield__error">Should be Integer value</span>
+                                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="publisher"
-									name="publisher" placeholder=""> <label
-									class="mdl-textfield__label" for="email">Publisher</label>
-							</div>
+                                  <div
+                                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="keyword"
+                                        name="keywordArray" placeholder=""> <label
+                                        class="mdl-textfield__label" for="email">Keywords
+                                        (Comma separated)</label>
+                                  </div>
 
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="year"
-									pattern="^[0-9]{4}$" maxlength="4" name="yearOfPublication"
-									placeholder=""> <label class="mdl-textfield__label"
-									for="year">Year of Publication</label> <span
-									class="mdl-textfield__error">Enter a valid Year</span>
-							</div>
-
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="Location"
-									name="location" placeholder=""> <label
-									class="mdl-textfield__label" for="email">Location</label>
-							</div>
-
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="copies" pattern="^[0-9]*$"
-									name="numberOfCopies" placeholder=""> <label
-									class="mdl-textfield__label" for="email">Number of
-									Copies</label><span
-									class="mdl-textfield__error">Should be Integer value</span>
-							</div>
-
-							<div
-								class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="keyword"
-									name="keywordArray" placeholder=""> <label
-									class="mdl-textfield__label" for="email">Keywords
-									(Comma separated)</label>
-							</div>
-
-							<input type="file" id="inputFile2" multiple="">Book Image</input>
-
-						</div>
-
-						<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="addbutton"
+                                  <input type="file" id="inputFile2" multiple="">Book Image</input>
+                              </div>
+                              <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="addbutton"
 							type="submit"  style="width: 330px;">Create</button>
 
-
-					</form>
-      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="addkeyword">
-        <i class="material-icons">search</i>
-
-    </button>
-					<script>
-					$('#addkeyword').click(
+                          </form>
+                          <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="addkeyword">
+                              <i class="material-icons">search</i>
+                          </button>
+                          <script>
+                              $('#addkeyword').click(
 							function() {
 								var isbnNumber = document
 										.getElementById("isbn").value;
@@ -543,14 +547,14 @@ color:white;
 									searchForISBN(isbnNumber);
 								}
 							});
-					$("#datetimepicker4").on("dp.change",function (e) {
+                              $("#datetimepicker4").on("dp.change",function (e) {
 				        console.log(e.date.format('H'));
 				        console.log(e.date.toDate());
 						window.latestdate=e.date.toDate();
 						console.log(latestdate);
 						//setDate(latestdate);
 				        });
-					window.setDate=function(){
+                              window.setDate=function(){
 						console.log(latestdate);
 						  $.ajax({
 							    url: '/setdate',
@@ -569,25 +573,16 @@ color:white;
 							    }
 							});
 					}
-					</script>
-					
-				</div>
-      </main>
-    </div>
-
-
-
+                    </script>
+                      </div>
+                  </main>
+              </div>
           <!-- Your content goes here -->
-
-
-
-
-      </section>
+          </section>
    
-      
-      <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-      <!-- Your content goes here -->
-      <div class="page-content" >
+          <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+              <!-- Your content goes here -->
+              <div class="page-content" >
           <!--
           <div style="margin-left:470px;margin-bottom:40px;">Search By Author,Keywords,Title, Publisher, Year Or ISBN</div>
           <form id="searchform">
@@ -604,29 +599,30 @@ color:white;
                   Search
               </button>
           </form>-->
-          <form class="form-inline" id="createsurvey">
-              <div class="form-group">
-                  <label for="surveyName" class="bmd-label-floating">Title</label>
-                  <input type="text" class="form-control" id="surveyName" name="surveyName">
-              </div>
-              <div class="form-group">
-                  Date: <input type="text" id="expireTime" name="expireTime">
-              </div>
-              <div class="form-group">
-                  <label for="surveyType" class="bmd-label-floating">Survey Type</label>
-                  <select class="form-control" id="surveyType" name="surveyType">
-                      <option>General</option>
-                      <option>Invation-Only</option>
-                      <option>Unique</option>
-                  </select>
-              </div>
-              <span class="form-group bmd-form-group">
-                  <button type="submit">Create</button>
-              </span>
-          </form>
+                  <form class="form-inline" id="createsurvey">
+                      <div class="form-group">
+                          <label for="surveyName" class="bmd-label-floating">Title</label>
+                          <input type="text" class="form-control" id="surveyName" name="surveyName">
+                      </div>
+                      <div class="form-group">
+                          Date: <input type="text" id="expireTime" name="expireTime">
+                      </div>
+                      <div class="form-group">
+                          <label for="surveyType" class="bmd-label-floating">Survey Type</label>
+                          <select class="form-control" id="surveyType" name="surveyType">
+                              <option>General</option>
+                              <option>Invation-Only</option>
+                              <option>Unique</option>
+                          </select>
+                      </div>
+                      <span class="form-group bmd-form-group">
+                          <button type="submit">Create</button>
+                      </span>
+                  </form>
 
 
  <script>
+     /*
  function searchresults(){
 		 console.log("Searching");
 	   //alert("inside searchresults");
@@ -770,25 +766,25 @@ function updatingbook(idtobedeleted1){
   //myWindow = window.open("update.html", "myWindow", "width=500,height=500");
   window.open('/book/update/'+ idtobedeleted1);
 }
-
+*/
  </script>
-  </div>
-  <center>
-<div id="hi"></div>
-</center>
+              </div>
+              <div id="hi"></div>
 
 
-        </div>
-      </section>
+</section>
+
+
+
       
       
       
       <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-      <center><p>Please select a Librarian From the Dropdown List</p>
+      <p>Please select a Librarian From the Dropdown List</p>
         <div class="page-content" id="library1" style="margin-left:20%">        
         
         </div>
-        </center>
+
         <!-- Your content goes here -->
 
 <script>

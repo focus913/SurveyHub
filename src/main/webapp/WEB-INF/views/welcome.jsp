@@ -37,21 +37,23 @@
             url: "/survey/getSurvey",
             success: function (data) {
                 alert("success");
-                var output = "<p>" + data + "</p>";
+                var output = "<p>" + data['surveyName'] + "</p>";
                 question.html(output);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
-            },
-            dataType: "jsonp"
+            }
         });
     }
+
+
 </script>
 
 <body>
 <div>
     <p>Welcome</p>
     <button type="submit" onclick="getSurvey()">Take Survey</button>
+    <div id="questions"></div>
 
 </div>
 </body>
