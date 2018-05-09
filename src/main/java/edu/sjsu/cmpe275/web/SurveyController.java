@@ -84,9 +84,12 @@ public class SurveyController {
     }
 
     @GetMapping(path = "/getSurvey", produces = {"application/json"})
-    public @ResponseBody Survey getSurvey(HttpSession httpSession) {
+    public String getSurvey(HttpSession httpSession, ModelMap model) {
         String surveyId = (String) httpSession.getAttribute(SURVEY_TO_TAKE);
-        return surveyHubService.getSurvey(surveyId);
+        System.out.println("GetSurvey " + surveyId);
+        Survey survey = surveyHubService.getSurvey(surveyId);
+        model.addAttribute("surveyGeneral", survey);
+        return "survey";
     }
 
     // na 05/08/2018

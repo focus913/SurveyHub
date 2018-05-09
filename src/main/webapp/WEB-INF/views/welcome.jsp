@@ -31,6 +31,8 @@
 
 
     function getSurvey() {
+        window.location = "/survey/getSurvey";
+        /*
         var question = $('#questions');
         $.ajax({
             type: "GET",
@@ -43,7 +45,7 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("error");
             }
-        });
+        });*/
     }
 
 
@@ -53,6 +55,7 @@
 <div>
     <p>Welcome</p>
     <button type="submit" onclick="getSurvey()">Take Survey</button>
+
     <div id="questions"></div>
 
 </div>
