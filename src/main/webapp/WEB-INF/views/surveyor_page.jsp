@@ -424,7 +424,7 @@ color:white;
                       var question = $('#questions');
                       $.ajax({
                           type: "GET",
-                          url: "/survey/getSurvey",
+                          url: "/account/surveys",
                           success: function (data) {
                               var output = "<table><thead><tr><th>No</th><th>Survey Name</th></thead><thbody>";
                               for (var i in data)
