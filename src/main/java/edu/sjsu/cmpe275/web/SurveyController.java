@@ -86,7 +86,7 @@ public class SurveyController {
         return TAKE_SURVEY_PAGE;
     }
 
-    @GetMapping(path = "/getSurvey")
+    @GetMapping(path = "/getSurvey", produces = {"application/json"})
     public @ResponseBody Survey getSurvey(HttpSession httpSession) {
         String surveyId = (String) httpSession.getAttribute(SURVEY_TO_TAKE);
         return surveyHubService.getSurvey(surveyId);
