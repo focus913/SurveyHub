@@ -47,10 +47,13 @@ public class SurveyController {
         surveyHubService.saveQuestions(surveyId, questions);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "/publish")
     public void publishSurvey(HttpSession httpSession) {
+        System.out.println("Publish survey");
         String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
         surveyHubService.updateSurvyStatus(surveyId, Survey.Action.PUBLISH, null);
+        httpSession.removeAttribute(CURRENT_SURVEY_ID);
     }
 
     @PutMapping(path = "/{surveyId}")
