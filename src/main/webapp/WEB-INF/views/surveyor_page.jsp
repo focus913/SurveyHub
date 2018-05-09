@@ -438,7 +438,8 @@ color:white;
                           },
                           error: function (jqXHR, textStatus, errorThrown) {
                               alert("error");
-                          }
+                          },
+                          dataType: "json"
                       });
                   }
               </script>
