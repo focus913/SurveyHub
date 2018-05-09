@@ -333,6 +333,7 @@ color:white;
         }
 
 
+        // create survey
         $("#createsurvey").submit(function(e) {
             e.preventDefault();
             if (document.getElementById('surveyName').value == '') {

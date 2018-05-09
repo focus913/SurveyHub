@@ -103,7 +103,7 @@
     function sendInvitation() {
         $.ajax({
             type: "POST",
-            url: "/",
+            url: "/survey/invitation",
             data: $('#invitation').serialize(),
             success: function (data) {
             },
@@ -113,7 +113,7 @@
                 console.log(error);
             },
             statusCode : {
-                200 : function() {
+                201 : function() {
                     window.location = '/account/createsurvey';
                 },
                 400 : function() {
@@ -123,7 +123,6 @@
 
                 },
                 404 : function() {
-
 
                 },
                 409 : function() {
@@ -313,7 +312,7 @@
                 <label for="toEmail" class="bmd-label-floating"></label>
                 <input type="text" class="form-control" id="toEmail" name="toEmail" required/>
                 <span class="form-group bmd-form-group">
-                  <button type="submit">Send Invation</button>
+                  <button type="submit">Send Invitation</button>
               </span>
             </form>
         </div>
