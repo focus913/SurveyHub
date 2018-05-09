@@ -28,6 +28,8 @@ public class SurveyController {
     private final static String UNPUBLISH = "unpublish";
     private final static String EXTEND = "extend";
     private final static String CURRENT_SURVEY_ID = "current_survey_id";
+    private final static String SURVEY_TO_TAKE = "survey_to_take";
+    private final static String TAKE_SURVEY_PAGE = "welcome";
 
     @Autowired
     SurveyHubService surveyHubService;
@@ -78,8 +80,15 @@ public class SurveyController {
         }
     }
 
-    @GetMapping(path = "/{surveyId}")
-    public @ResponseBody Survey getSurvey(@PathVariable("surveyId") String surveyId) {
+    @GetMapping(path = "/takeSurvey")
+    public String takeSurvey(@RequestParam("surveyId") String surveyId, HttpSession httpSession) {
+        httpSession.setAttribute(SURVEY_TO_TAKE, surveyId);
+        return TAKE_SURVEY_PAGE;
+    }
+
+    @GetMapping(path = "/getSurvey")
+    public @ResponseBody Survey getSurvey(HttpSession httpSession) {
+        String surveyId = (String) httpSession.getAttribute(SURVEY_TO_TAKE);
         return surveyHubService.getSurvey(surveyId);
     }
 
