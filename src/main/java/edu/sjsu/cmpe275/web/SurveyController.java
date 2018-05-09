@@ -6,6 +6,7 @@ import edu.sjsu.cmpe275.service.SurveyHubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -87,6 +88,15 @@ public class SurveyController {
         String surveyId = (String) httpSession.getAttribute(SURVEY_TO_TAKE);
         return surveyHubService.getSurvey(surveyId);
     }
+
+    // na 05/08/2018
+    @GetMapping(path = "/{surveyId}")
+    public String getSurvey(@PathVariable("surveyId") String surveyId, ModelMap model) {
+        Survey s = surveyHubService.getSurvey(surveyId);
+        model.addAttribute("surveyGeneral", s);
+        return "survey";
+    }
+
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/answer")
