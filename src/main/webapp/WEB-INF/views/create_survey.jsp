@@ -19,10 +19,9 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-    <!--
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    -->
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 </head>
 
 <script>
@@ -40,18 +39,32 @@
             }
         });
 
+        var question_name = 1;
         function submitQuestion() {
 
             var question = {
                 title: document.getElementById("questionTitle").value,
-                inputType: document.getElementById("surveyType").value,
-                choice: [
+                type: document.getElementById("surveyType").value,
+                name: question_name,
+                choices: [
                     document.getElementById("choice1").value,
                     document.getElementById("choice2").value,
                     document.getElementById("choice3").value,
                     document.getElementById("choice4").value
                 ]
             };
+
+            /*
+            {"title":"Choose a color",
+            "name":"1",
+            "type":"checkbox",
+            "choices":[
+            "red",
+            "blue",
+            "yellow",
+            "white"]
+            }
+             */
 
             $.ajax({
                 type: "POST",
@@ -91,7 +104,7 @@
             });
 
             document.getElementById("questionContent").reset();
-
+            question_name += 1;
         }
 
     });
@@ -220,12 +233,13 @@
 <body>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-4">
-            <a href="/account/surveyor">Survey Ape</a>
+        <div class="col-2">
+            <a href="/account/surveyor">Survey Hub</a>
         </div>
-        <div class="col-4">
-            <button id="logout" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();">
-                Log Out
+        <div class="col-4"></div>
+        <div class="col-2">
+            <button id="logout" class="btn btn-primary" onclick="logOutLibrarian();">
+            Log Out
             </button>
         </div>
     </div>
@@ -237,9 +251,9 @@
                 <div class="form-group">
                     <label for="surveyType" class="bmd-label-floating">Question Type</label>
                     <select class="form-control" id="surveyType" name="surveyType">
-                        <option value="1">Short Answer</option>
-                        <option value="2">Yes or No</option>
-                        <option value="3">Multiple Choice</option>
+                        <option value="text">Short Answer</option>
+                        <option value="radiogroup">Yes or No</option>
+                        <option value="checkbox">Multiple Choice</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -269,15 +283,15 @@
     <div class="row justify-content-center">
         <div class="col-6">
             <form id="invitationForm">
-                <fieldset>Send Invitation</fieldset>
+
 
                 <div class="form-group">
-                    <label for="toEmail" class="bmd-label-floating">Choice 4</label>
+                    <label for="toEmail" class="bmd-label-floating">Email</label>
                     <input type="text" class="form-control" id="toEmail" name="toEmail" />
 
                 </div>
                 <div class="form-group">
-                    <button type="submit" onclick="sendInvitation()">Send</button>
+                    <button type="submit" onclick="sendInvitation()">Send Invation</button>
                 </div>
             </form>
         </div>
@@ -286,7 +300,7 @@
     <div class="row justify-content-center">
         <div class="col-6">
             <form id="publish">
-                <div class="form-control">
+                <div class="form-group">
                     <button type="submit" onclick="publishSurvey()">Publish</button>
                 </div>
             </form>
