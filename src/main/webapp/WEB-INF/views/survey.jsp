@@ -5,7 +5,8 @@
 </head>
 <body>
 <div>
-    <p>Survey 1</p>
+    <p>Survey</p>
+
 </div>
 
 </body>

@@ -102,6 +102,7 @@
         $.ajax({
             type: "POST",
             url: "/survey/invitation",
+            data: $("#invitationForm").serialize(),
             success: function () {
             },
             error: function (error) {
