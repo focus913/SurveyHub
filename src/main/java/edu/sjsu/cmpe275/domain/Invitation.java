@@ -74,5 +74,6 @@ public class Invitation {
 
     public Invitation() {
         this.invitationId = "invitation_" + UUID.randomUUID().toString().replaceAll("-", "");
+        this.url = "http://localhost:8080";
     }
 }
