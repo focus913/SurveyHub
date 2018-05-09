@@ -98,7 +98,7 @@ public class AccountController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(path = "/surveys")
+    @GetMapping(path = "/surveys", produces = {"application/json"})
     public List<String> getSurveyNames(HttpSession httpSession) {
         System.out.println("GET Surveys");
         String email = (String) httpSession.getAttribute(LOGIN_USER_NAME);
