@@ -417,7 +417,7 @@ color:white;
     </header>
       <main class="mdl-layout__content" style="height:800px;">
           <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-              <p>Hello</p>
+              <p>Welcome to Survey Ape</p>
 
               <script>
                   function getSurvey() {
@@ -426,10 +426,11 @@ color:white;
                           type: "GET",
                           url: "/account/surveys",
                           success: function (data) {
-                              var output = "<table><thead><tr><th>No</th><th>Survey Name</th></thead><thbody>";
+                              alert("get data");
+                              var output = "<table><thead><tr><th>Survey Name</th></thead><thbody>";
                               for (var i in data)
                               {
-                                  output += "<tr><td>" + i + "</td><td>" + data[i] + "</td></tr>";
+                                  output += "<tr><td>" + data[i] + "</td></tr>";
                               }
                               output += "</tbody></table>";
 
@@ -443,6 +444,10 @@ color:white;
               </script>
 
               <button type="submit" onclick="getSurvey()">List Survey</button>
+              <div id="questions">
+
+
+              </div>
 
 
           </section>
