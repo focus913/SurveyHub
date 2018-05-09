@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/account")
@@ -93,5 +95,19 @@ public class AccountController {
     @GetMapping(path = "/createsurvey")
     public String getCreateSurveyPage() {
         return CREATE_SURVEY_PAGE;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(path = "/surveys")
+    public List<String> getSurveyNames(HttpSession httpSession) {
+        System.out.println("GET Surveys");
+        String email = (String) httpSession.getAttribute(LOGIN_USER_NAME);
+        Account account = surveyHubService.getAccountByEmail(email);
+
+        List<String> names = new ArrayList<>();
+        for (Survey survey : account.getCreatedSurveys()) {
+            names.add(survey.getSurveyName());
+        }
+        return names;
     }
 }

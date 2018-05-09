@@ -102,7 +102,7 @@ public class SurveyController {
 
     @PostMapping(path = "/invitation")
     public void sendInvitation(@ModelAttribute Invitation invitation, HttpSession httpSession) {
-        String surveyId = (String ) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
         invitation.setUrl(invitation.getUrl() + "/survey/takeSurvey" + "?surveyId=" + surveyId);
         List<Invitation> invitations = new ArrayList<>();
         invitations.add(invitation);
