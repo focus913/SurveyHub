@@ -19,9 +19,10 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+    <!--
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    -->
 </head>
 
 <script>
@@ -87,25 +88,21 @@
 
                     }
                 }
-            })
+            });
+
+            document.getElementById("questionContent").reset();
 
         }
 
     });
 
 
-    // send invation
-    $('#invitation').submit(function (e) {
-        e.preventDefault();
-        sendInvitation();
-    });
-
+    // send invitation
     function sendInvitation() {
         $.ajax({
             type: "POST",
             url: "/survey/invitation",
-            data: $('#invitation').serialize(),
-            success: function (data) {
+            success: function () {
             },
             error: function (error) {
                 window.errorMsg = JSON.parse(error.responseText);
@@ -135,20 +132,15 @@
             }
 
         });
+        document.getElementById("invitationForm").reset();
     }
 
     // publish survey
-    $('#publish').submit(function (e) {
-        e.preventDefault();
-        publishSurvey();
-    });
-
     function publishSurvey() {
         $.ajax({
             type: "POST",
             url: "/survey/publish",
-            data: $('#publish').serialize(),
-            success: function (data) {
+            success: function () {
             },
             error: function (error) {
                 window.errorMsg = JSON.parse(error.responseText);
@@ -156,8 +148,8 @@
                 console.log(error);
             },
             statusCode : {
-                200 : function() {
-                    window.location = '/account';
+                201 : function() {
+                    window.location = '/account/surveyor';
                 },
                 400 : function() {
 
@@ -167,23 +159,20 @@
                 },
                 404 : function() {
 
-
                 },
                 409 : function() {
                 }
             },
             complete : function(e) {
-                if (e.status == 200) {
-
+                if (e.status == 201) {
+                    alert("fuck");
                 }
             }
 
         });
     }
 
-
-
-
+    // user logout
     $('#logout').click(function(e){
         console.log("clicked button");
         logOutLibrarian();
@@ -231,7 +220,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-4">
-            Survey Ape
+            <a href="/account/surveyor">Survey Ape</a>
         </div>
         <div class="col-4">
             <button id="logout" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();">
@@ -239,36 +228,6 @@
             </button>
         </div>
     </div>
-
-    <!--
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <form id="sa">
-                <fieldset>Short Answer Question</fieldset>
-                <div class="form-group">
-                    <label for="questionContent" class="bmd-label-floating">Title</label>
-                    <input type="text" class="form-control" id="questionContent" name="questionContent" />
-                    <span>
-                        <button type="submit">Add</button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <form id="yn">
-                <fieldset>Yes or No Question</fieldset>
-                <div class="form-group">
-                    <label for="ynTitle" class="bmd-label-floating">Title</label>
-                    <input type="text" class="form-control" id="ynTitle" name="questionContent" />
-                    <button type="submit">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    -->
 
     <div class="row justify-content-center">
         <div class="col-6">
@@ -308,18 +267,30 @@
 
     <div class="row justify-content-center">
         <div class="col-6">
-            <form id="invitation" class="form-inline">
-                <label for="toEmail" class="bmd-label-floating"></label>
-                <input type="text" class="form-control" id="toEmail" name="toEmail" required/>
-                <span class="form-group bmd-form-group">
-                  <button type="submit">Send Invitation</button>
-              </span>
+            <form id="invitationForm">
+                <fieldset>Send Invitation</fieldset>
+
+                <div class="form-group">
+                    <label for="toEmail" class="bmd-label-floating">Choice 4</label>
+                    <input type="text" class="form-control" id="toEmail" name="toEmail" />
+
+                </div>
+                <div class="form-group">
+                    <button type="submit" onclick="sendInvitation()">Send</button>
+                </div>
             </form>
         </div>
     </div>
-    <form id="publish">
-        <input type="submit" name="publish" value="Publish" />
-    </form>
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <form id="publish">
+                <div class="form-control">
+                    <button type="submit" onclick="publishSurvey()">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
 </body>
