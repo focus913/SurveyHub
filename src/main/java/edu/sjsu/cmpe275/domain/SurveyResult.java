@@ -1,9 +1,15 @@
 package edu.sjsu.cmpe275.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class SurveyResult {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String startTime;
     private String endTime;
     private int participants;
