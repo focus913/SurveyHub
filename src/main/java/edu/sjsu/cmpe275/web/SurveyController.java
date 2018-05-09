@@ -1,9 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
-import edu.sjsu.cmpe275.domain.Answer;
-import edu.sjsu.cmpe275.domain.Invitation;
-import edu.sjsu.cmpe275.domain.Question;
-import edu.sjsu.cmpe275.domain.Survey;
+import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
 import edu.sjsu.cmpe275.service.SurveyHubService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
@@ -107,5 +103,16 @@ public class SurveyController {
         List<Invitation> invitations = new ArrayList<>();
         invitations.add(invitation);
         surveyHubService.sendInvitation(surveyId, invitations);
+    }
+
+    @GetMapping(path = "/{surveyId}/result")
+    public SurveyResult getResult(@RequestParam("surveyId") String surveyId) {
+        Survey survey = surveyHubService.getSurvey(surveyId);
+        SurveyResult surveyResult = new SurveyResult();
+        surveyResult.setStartTime(survey.getCreateTime().toString());
+        surveyResult.setEndTime(survey.getExpireTime().toString());
+        surveyResult.setParticipants(survey.getParticipantNum());
+        surveyResult.setParticipationRate((double) survey.getParticipantNum() / (double) survey.getInvitationNum());
+        return surveyResult;
     }
 }

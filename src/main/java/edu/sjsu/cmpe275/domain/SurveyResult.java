@@ -3,7 +3,7 @@ package edu.sjsu.cmpe275.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class SurveyResults {
+public class SurveyResult {
     private String startTime;
     private String endTime;
     private int participants;
