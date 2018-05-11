@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
 import edu.sjsu.cmpe275.service.SurveyHubService;
@@ -10,12 +12,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/survey")
@@ -27,6 +28,8 @@ public class SurveyController {
     private final static String CURRENT_SURVEY_ID = "current_survey_id";
     private final static String SURVEY_TO_TAKE = "survey_to_take";
     private final static String TAKE_SURVEY_PAGE = "welcome";
+    private final static String SURVEY_ID_KEY = "surveyId";
+    private final static String CONTENT_KEY = "content";
 
     @Autowired
     SurveyHubService surveyHubService;
@@ -100,12 +103,34 @@ public class SurveyController {
         return "survey";
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/answer")
-    public void saveAnswer(@ModelAttribute Answer answer) {
+    public void saveAnswers(@RequestBody String answersJson) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> jsonMap = objectMapper.readValue(
+                answersJson, new TypeReference<HashMap<String, String>>() {});
+        String surveyId = jsonMap.get(SURVEY_ID_KEY);
+        if (null == surveyId || surveyId.isEmpty()) {
+            throw new InvalidOperationException("Empty surveyId");
+        }
+        String content = jsonMap.get(CONTENT_KEY);
+        if (null == content || content.isEmpty()) {
+            throw new InvalidOperationException("Empty content");
+        }
+
+        Map<String, String> answerMap = objectMapper.readValue(
+                content, new TypeReference<HashMap<String, String>>() {});
+
         List<Answer> answers = new ArrayList<>();
-        answers.add(answer);
+        for (Map.Entry<String, String> entry : answerMap.entrySet()) {
+            String questonId = entry.getKey();
+            Answer answer = new Answer();
+            Question question = new Question();
+            question.setQuestionId(questonId);
+            answer.setQuestion(question);
+            answer.setContent(entry.getValue());
+            answers.add(answer);
+        }
         surveyHubService.saveAnswers(answers);
     }
 
