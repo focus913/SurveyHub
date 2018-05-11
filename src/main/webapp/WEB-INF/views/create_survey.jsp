@@ -19,9 +19,12 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    -->
 </head>
 
 <script>
@@ -42,15 +45,17 @@
         var question_name = 1;
         function submitQuestion() {
 
-            if (document.getElementById("surveyType").value == "rating") {
+            if (document.getElementById("surveyType").value == "rating"){
+                console.log("inside rating")
                 var question = {
                     title: document.getElementById("questionTitle").value,
-                    type: document.getElementById("surveyType").value,
+                    type: "barrating",
                     name: question_name,
-                    minRateDescription: "Bad",
-                    maxRateDescription: "Great"
+                    ratingTheme: "fontawesome-stars",
+                    choices: ["1", "2", "3", "4", "5"]
                 };
-            } else {
+            }
+            else {
                 var question = {
                     title: document.getElementById("questionTitle").value,
                     type: document.getElementById("surveyType").value,
@@ -64,18 +69,6 @@
                 };
             }
 
-
-            /*
-            {"title":"Choose a color",
-            "name":"1",
-            "type":"checkbox",
-            "choices":[
-            "red",
-            "blue",
-            "yellow",
-            "white"]
-            }
-             */
 
             $.ajax({
                 type: "POST",
@@ -243,29 +236,31 @@
 
 <body>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-2">
-            <a href="/account/surveyor">Survey Hub</a>
-        </div>
+    <div class="row h-30">
         <div class="col-4"></div>
-        <div class="col-2">
-            <button id="logout" class="btn btn-primary" onclick="logOutLibrarian();">
-            Log Out
+        <div class="col-2 float-left">
+            <a href="/account/surveyor" role="button" class="mdl-button mdl-js-button mdl-js-ripple-effect">Survey Ape</a>
+        </div>
+
+        <div class="col-2 float-right">
+            <button id="logout" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();">
+                Log Out
             </button>
         </div>
+
+        <div class="col-4"></div>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-6">
             <form id="questionContent">
-                <fieldset>Add Question</fieldset>
                 <div class="form-group">
                     <label for="surveyType" class="bmd-label-floating">Question Type</label>
                     <select class="form-control" id="surveyType" name="surveyType">
                         <option value="text">Short Answer</option>
                         <option value="radio">Yes or No</option>
                         <option value="checkbox">Multiple Choice</option>
-                        <option value="rating">Rating</option>
+                        <option value="rating">Star</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -286,7 +281,7 @@
 
                 </div>
                 <div class="form-group">
-                    <button type="submit">Add</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
         </div>
@@ -296,14 +291,13 @@
         <div class="col-6">
             <form id="invitationForm">
 
-
                 <div class="form-group">
-                    <label for="toEmail" class="bmd-label-floating">Email</label>
+                    <label for="toEmail" class="bmd-label-floating">Invite Email</label>
                     <input type="text" class="form-control" id="toEmail" name="toEmail" />
 
                 </div>
                 <div class="form-group">
-                    <button type="submit" onclick="sendInvitation()">Send Invation</button>
+                    <button type="submit" class="btn btn-primary" onclick="sendInvitation()">Send</button>
                 </div>
             </form>
         </div>
@@ -313,7 +307,7 @@
         <div class="col-6">
             <form id="publish">
                 <div class="form-group">
-                    <button type="submit" onclick="publishSurvey()">Publish</button>
+                    <button type="submit" class="btn btn-primary" onclick="publishSurvey()">Publish</button>
                 </div>
             </form>
         </div>

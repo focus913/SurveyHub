@@ -3,13 +3,10 @@
 <html>
 <head>
     <!-- Material Design fonts -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <!--
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet"
-          href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">-->
+          href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -176,7 +173,6 @@
         });
     });
 </script>
-<!--
 <style>
     body {
 
@@ -302,10 +298,9 @@
     }
 
 </style>
--->
 <body>
 <h1 style="text-align:center;">Survey Ape</h1>
-<form id="createUserForm" class="form-group">
+<%--<form id="createUserForm">
     <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
 
         <div id="firstform">
@@ -316,78 +311,44 @@
                             class="mdl-card__title mdl-color--primary mdl-color-text--white">
                         <h2 class="mdl-card__title-text" >Sign Up</h2>
                     </div>
-                </div>
-            </form>
 
-        </div>
 
-        <div class="col-2"></div>
-        <!-- login form -->
-        <div class="col-5 justify-content-md-center">
-            <div id="secondform">
-                <!--
-                <h3>Login to Access</h3>
-
-                <main class="mdl-layout__content" id="second"
-                      style="float:right;margin-right:90px; margin-top:30px;">-->
-                    <div class="mdl-card mdl-shadow--6dp">
-                        <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                            <h2 class="mdl-card__title-text">Sign In</h2>
+                    <div class="mdl-card__supporting-text">
+                        <div
+                                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="firstName"
+                                   name="firstName"> <label class="mdl-textfield__label"
+                                                            for="firstname" requird>First Name</label>
                         </div>
-                        <form id="accountLoginForm">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label for="loginType" class="bmd-label-floating">Account Type</label>
-                                    <select class="form-control" id="loginType" name="loginType">
-                                        <option>Select</option>
-                                        <option value="0">Surveyor</option>
-                                        <option value="1">Surveyee</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--
-                            <div class="form-group">
-                                <label class="bmd-label-floating" for="loginType">Account Type</label>
-                                <input class="form-control" type="number" id="loginType" name="loginType">
-                                <span class="bmd-help">Enter 0 or 1</span>
-                            </div>
-                            -->
-                            <div class="form-group">
-                                <label class="bmd-label-floating" for="loginEmail">Username</label>
-                                <input class="form-control" type="email" id="loginEmail" name="email">
-                                <span class="bmd-help">Not a Valid SJSU Email</span>
-                            </div>
+                        <div
+                                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="lastName"
+                                   name="lastName"> <label class="mdl-textfield__label"
+                                                           for="lastname">Last Name</label>
 
-                            <div class="form-group">
-                                <label class="bmd-label-floating" for="password">Password</label>
-                                <input class="form-control" type="password" id="password" name="password" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})" >
-                                <span class="bmd-help">Password must contain Uppercase,lowercase,special character & a Number. Length between
-                            6 and 20</span>
-                            </div>
+                        </div>
+                        <div
+                                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="email" id="signupEmail"
+                                   name="email"> <label class="mdl-textfield__label"
+                                                            for="email">Username</label> <span class="mdl-textfield__error">Not
+								a Valid Email</span>
+                        </div>
 
-                            <button class="btn btn-primary btn-raised" type="submit">
-                                Log In</button>
+                        <div
+                                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="password" id="password"
+                                   name="password" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})"> <label class="mdl-textfield__label"
+                                                                                                                          for="password">Password</label><span class="mdl-textfield__error">Password must contain
+								Uppercase,lowercase,special character & a Number. Length between
+								6 and 20</span>
+                        </div>
 
-                        </form>
-
-                    </div>
-                </main>
-
-            </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label form-control">
-                            <label for="type" class="bmd-label-floating">Account Type</label>
-                            <select class="form-control" id="type" name="type">
-                                <option>Select</option>
-                                <option value="0">Surveyor</option>
-                                <option value="1">Surveyee</option>
-                            </select>
-                            <!--
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="number"
                                     id="type" name="type"> <label
                                 class="mdl-textfield__label" for="type">Account Type</label> <span
                                 class="mdl-textfield__error">Enter 0 or 1</span>
-                                -->
                         </div>
 
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="/reawidth:300px;">
@@ -397,24 +358,33 @@
             </main>
         </div>
     </div>
-</form>
+</form>--%>
 
-
-<%--<div id="secondform">
-    <h3>Login to Access</h3>
+<div class="mdl-layout mdl-js-layout mdl-color--grey-100">
+<div id="firstform">
+    <h3 style="margin-left: 30px;">Login to Access</h3>
     <main class="mdl-layout__content" id="second"
           style="float:right;margin-right:90px; margin-top:30px;">
         <div class="mdl-card mdl-shadow--6dp">
             <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
                 <h2 class="mdl-card__title-text">Sign In</h2>
             </div>
-            <form id="accountLoginForm">
+            <form id="accountLoginForm" class="form-group">
                 <div class="mdl-card__supporting-text">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label form-control">
+
+                        <label for="loginType" class="bmd-label-floating">Account Type</label>
+                        <select class="form-control" id="loginType" name="loginType">
+                            <option>Select</option>
+                            <option value="0">Surveyor</option>
+                            <option value="1">Surveyee</option>
+                        </select>
+                        <!--
                         <input class="mdl-textfield__input" type="number"
                                id="loginType" name="loginType"> <label
                             class="mdl-textfield__label" for="loginType">Account Type</label> <span
                             class="mdl-textfield__error">Enter 0 or 1</span>
+                            -->
                     </div>
                     <div
                             class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -424,6 +394,14 @@
 							a Valid SJSU Email</span>
                     </div>
 
+                    <div
+                            class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="password" id="password"
+                               name="password" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})" > <label class="mdl-textfield__label"
+                                                                                                                       for="password">Password</label><span class="mdl-textfield__error">Password must contain
+								Uppercase,lowercase,special character & a Number. Length between
+								6 and 20</span>
+                    </div>
 
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="width:300px;">
                         Log On</button>
@@ -431,14 +409,14 @@
             </form>
         </div>
     </main>
-</div>--%>
+</div>
+</div>
 
 <%--<div id="verticle-line"></div>--%>
 <div id="or">
     <h3>Or</h3>
 </div>
 <div id="snackbar">Some text some message..</div>
-</div>
--->
+
 </body>
 </html>

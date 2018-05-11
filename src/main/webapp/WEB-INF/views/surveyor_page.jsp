@@ -2,6 +2,10 @@
 <head>
     <meta charset="utf-8"/>
     <!-- Material Design fonts -->
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
@@ -42,6 +46,19 @@
 	padding: 24px;
 	flex: none;
 }
+.mdl-layout__tab-bar {
+    background-color:#7faf2b !important;
+}
+
+.mdl-layout__header{
+    background-color:#7faf2b !important;
+}
+
+.mdl-layout__tab-bar-button{
+    background-color:#7faf2b !important;
+}
+
+
 #snackbar.show {
 	visibility: visible; /* Show the snackbar */
 	/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
@@ -121,6 +138,7 @@ color:white;
 	left: 50%; /* Center the snackbar */
 	bottom: 30px; /* 30px from the bottom */
 }
+
 </style>
 <body>
 <script>
@@ -177,7 +195,7 @@ color:white;
         		},
         		statusCode : {
         			200 : function() {
-        				window.location = "/signup";
+        				window.location = "/login";
         			},
         			400 : function() {
         				
@@ -268,20 +286,20 @@ color:white;
             <button id="logout"class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();" style="width:200px;">
                 Log Out
             </button>
-            <span class="mdl-layout-title">SJSU Library</span>
+            <span class="mdl-layout-title">Hello ${surveyorId} ! Welcom to Survey Ape!</span>
         </div>
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
             <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Surveys</a>
             <a href="#scroll-tab-2" class="mdl-layout__tab">Create</a>
-            <a href="#scroll-tab-3" class="mdl-layout__tab">Search By Librarian</a>
-            <a href="#scroll-tab-4" class="mdl-layout__tab">Add</a>
+            <a href="#scroll-tab-3" class="mdl-layout__tab">Report</a>
         </div>
     </header>
     <main class="mdl-layout__content" style="height:800px;">
         <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-            <p>Welcome to Survey Ape</p>
             <script>
+                console.log("${surveyorId}");
+
                   function getSurvey() {
                       var question = $('#questions');
                       $.ajax({
@@ -305,7 +323,7 @@ color:white;
                   }
             </script>
 
-            <button type="submit" onclick="getSurvey()">List Survey</button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" type="submit" onclick="getSurvey()">List Survey</button>
             <div id="questions"></div>
 
         </section>
@@ -315,7 +333,7 @@ color:white;
         <section class="mdl-layout__tab-panel" id="scroll-tab-2">
             <!-- Your content goes here -->
             <div class="page-content" >
-                <form class="form-inline" id="createsurvey">
+                <form id="createsurvey">
                     <div class="form-group">
                         <label for="surveyName" class="bmd-label-floating">Title</label>
                         <input type="text" class="form-control" id="surveyName" name="surveyName">
@@ -340,7 +358,7 @@ color:white;
         </section>
 
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-            <p>Please select a Librarian From the Dropdown List</p>
+            <p>Feature not implemented</p>
             <div class="page-content" id="library1" style="margin-left:20%">
             </div>
 
