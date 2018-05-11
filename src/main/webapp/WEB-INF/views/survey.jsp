@@ -2,10 +2,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>The example of showing survey as a popup window, jQuery Survey Library Example</title>
+    <title>Survey</title>
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://surveyjs.azureedge.net/1.0.20/survey.jquery.js"></script>
     <link href="https://surveyjs.azureedge.net/1.0.20/survey.css" type="text/css" rel="stylesheet"/>
+
+    <script src="https://unpkg.com/jquery-bar-rating"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!-- Themes -->
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-1to10.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-movie.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-square.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-pill.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-reversed.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bars-horizontal.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/fontawesome-stars.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/css-stars.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/bootstrap-stars.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery-bar-rating@1.2.2/dist/themes/fontawesome-stars-o.css">
+    <script src="https://unpkg.com/surveyjs-widgets"></script>
 
 
 </head>
@@ -16,82 +32,47 @@
 <script>
     <%@ page import="edu.sjsu.cmpe275.domain.Survey" %>
 
-
     var surveyId = "${surveyGeneral.surveyId}";
-    console.log(surveyId);
+
+    var surveyName = "${surveyGeneral.surveyName}";
+
+    var rJson = {
+        surveyId : surveyId
+    }
+
     var cjson = [];
 
     <c:forEach items="${surveyGeneral.questions}" var="question">
-    console.log(${question.questionContent});
+        console.log(${question.questionContent});
 
-    cjson.push(${question.questionContent});
-    console.log(cjson);
+        <%--/*var questionT = $.extend({}, {questionId: ${question.questionId}}, ${question.questionContent});--%>
+<%--*/--%>
+        cjson.push(${question.questionContent});
+        console.log("Inside for loop", cjson);
 
     </c:forEach>
 
-
-    console.log(cjson);
-
-
-    var djson = {};
-    djson.questions = cjson;
-
-
-    /*   $(document).ready(function(urlString){
-           $.ajax({
-               url: urlString,
-               type: "GET",
-               success: function(data) {
-                   console.log(data);
-                   window.survey = new Survey.Model(json);
-               }, //data holds {success:true} - see below
-               error: function(error) {
-                   console.log(error);
-                   errorMsg = JSON.parse(error.responseText);}
-           });
-       })*/
-</script>
-
-<script>
-    var surveyValueChanged = function(sender, options) {
-        var el = document.getElementById(options.name);
-        if (el) {
-            el.value = options.value;
-
-            console.log(el);
-        }
-    };
-
-
+    console.log("outside for loop", cjson);
 
     Survey
         .StylesManager
         .applyTheme("default");
 
-    /*
-        var json = {
-            questions: [{
-                type: "checkbox",
-                name: "car",
-                title: "What car are you driving?",
-                isRequired: true,
-                colCount: 4,
-                choices: [
-                    "None",
-                    "Ford",
-                    "Vauxhall",
-                    "Volkswagen",
-                    "Nissan",
-                    "Audi",
-                    "Mercedes-Benz",
-                    "BMW",
-                    "Peugeot",
-                    "Toyota",
-                    "Citroen"
-                ]
-            }]
-        };
-    */
+
+    var djson = {};
+    djson.elements = cjson;
+    djson.title = surveyName;
+
+
+    console.log(djson);
+
+    var surveyValueChanged = function(sender, options) {
+        var el = document.getElementById(options.name);
+        if (el) {
+            el.value = options.value;
+            console.log("when click on element: ",el);
+        }
+    };
 
     window.survey = new Survey.Model(djson);
     var sResult = [];
@@ -116,22 +97,18 @@
         .onComplete
         .add(function () {
             console.log("sResult is ", sResult);
+            rJson.content = sResult;
+
+            console.log("stringify rJson: ", JSON.stringify(rJson));
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/survey/answer");
             xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-            xhr.send(JSON.stringify(sResult));
+            xhr.send(JSON.stringify(rJson));
 
             document
                 .querySelector('#surveyResult')
-            /*.innerHTML = "result: " + JSON.stringify(result.data);*/
         });
-
-    /*    survey.data = {
-            name: 'John Doe',
-            email: 'johndoe@nobody.com',
-            car: ['Ford']
-        };*/
 
     $("#surveyElement").Survey({
         model: survey,
