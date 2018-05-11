@@ -1,7 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
 import edu.sjsu.cmpe275.service.SurveyHubService;
@@ -108,7 +107,7 @@ public class SurveyController {
     public void saveAnswers(@RequestBody String answersJson) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> jsonMap = objectMapper.readValue(
-                answersJson, new TypeReference<HashMap<String, String>>() {});
+                answersJson, HashMap.class);
         String surveyId = jsonMap.get(SURVEY_ID_KEY);
         if (null == surveyId || surveyId.isEmpty()) {
             throw new InvalidOperationException("Empty surveyId");
@@ -119,7 +118,7 @@ public class SurveyController {
         }
 
         Map<String, String> answerMap = objectMapper.readValue(
-                content, new TypeReference<HashMap<String, String>>() {});
+                content, HashMap.class);
 
         List<Answer> answers = new ArrayList<>();
         for (Map.Entry<String, String> entry : answerMap.entrySet()) {
