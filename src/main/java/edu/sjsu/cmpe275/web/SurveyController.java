@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
+import edu.sjsu.cmpe275.service.Constants;
 import edu.sjsu.cmpe275.service.SurveyHubService;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,22 +24,13 @@ import java.util.*;
 @RequestMapping("/survey")
 public class SurveyController {
 
-    private final static String PUBLISH = "publish";
-    private final static String UNPUBLISH = "unpublish";
-    private final static String EXTEND = "extend";
-    private final static String CURRENT_SURVEY_ID = "current_survey_id";
-    private final static String SURVEY_TO_TAKE = "survey_to_take";
-    private final static String TAKE_SURVEY_PAGE = "welcome";
-    private final static String SURVEY_ID_KEY = "surveyId";
-    private final static String CONTENT_KEY = "content";
-
     @Autowired
     SurveyHubService surveyHubService;
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/question")
     public void saveQuestion(@RequestBody Question question, HttpSession httpSession) throws IOException {
-        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        String surveyId = (String) httpSession.getAttribute(Constants.CURRENT_SURVEY_ID);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(question.getQuestionContent());
         question.setQuestionId(rootNode.get("name").asText());
@@ -56,20 +49,20 @@ public class SurveyController {
     @PostMapping(path = "/publish")
     public void publishSurvey(HttpSession httpSession) {
         System.out.println("Publish survey");
-        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        String surveyId = (String) httpSession.getAttribute(Constants.CURRENT_SURVEY_ID);
         surveyHubService.updateSurvyStatus(surveyId, Survey.Action.PUBLISH, null);
-        httpSession.removeAttribute(CURRENT_SURVEY_ID);
+        httpSession.removeAttribute(Constants.CURRENT_SURVEY_ID);
     }
 
     @PutMapping(path = "/{surveyId}")
     public void updateSurveyStatus(@PathVariable("surveyId") String surveyId,
                                    @RequestParam String action,
                                    @RequestParam String dueDateStr) {
-        if (PUBLISH.equalsIgnoreCase(action)) {
+        if (Constants.PUBLISH.equalsIgnoreCase(action)) {
             surveyHubService.updateSurvyStatus(surveyId, Survey.Action.PUBLISH, null);
-        } else if (UNPUBLISH.equalsIgnoreCase(action)) {
+        } else if (Constants.UNPUBLISH.equalsIgnoreCase(action)) {
             surveyHubService.updateSurvyStatus(surveyId, Survey.Action.UNPUBLISH, null);
-        } else if (EXTEND.equalsIgnoreCase(action)) {
+        } else if (Constants.EXTEND.equalsIgnoreCase(action)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH");
             Date dueDate = null;
             try {
@@ -85,13 +78,13 @@ public class SurveyController {
 
     @GetMapping(path = "/takeSurvey")
     public String takeSurvey(@RequestParam("surveyId") String surveyId, HttpSession httpSession) {
-        httpSession.setAttribute(SURVEY_TO_TAKE, surveyId);
-        return TAKE_SURVEY_PAGE;
+        httpSession.setAttribute(Constants.SURVEY_TO_TAKE, surveyId);
+        return Constants.TAKE_SURVEY_PAGE;
     }
 
     @GetMapping(path = "/getSurvey", produces = {"application/json"})
     public String getSurvey(HttpSession httpSession, ModelMap model) {
-        String surveyId = (String) httpSession.getAttribute(SURVEY_TO_TAKE);
+        String surveyId = (String) httpSession.getAttribute(Constants.SURVEY_TO_TAKE);
         System.out.println("GetSurvey " + surveyId);
         Survey survey = surveyHubService.getSurvey(surveyId);
         model.addAttribute("surveyGeneral", survey);
@@ -112,11 +105,11 @@ public class SurveyController {
         System.out.println("Save answer");
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(answersJson);
-        String surveyId = jsonNode.get(SURVEY_ID_KEY).asText();
+        String surveyId = jsonNode.get(Constants.SURVEY_ID_KEY).asText();
         if (null == surveyId || surveyId.isEmpty()) {
             throw new InvalidOperationException("Empty surveyId");
         }
-        JsonNode contentNode = jsonNode.get(CONTENT_KEY);
+        JsonNode contentNode = jsonNode.get(Constants.CONTENT_KEY);
         List<Answer> answers = new ArrayList<>();
         List<String> questionIds = new ArrayList<>();
         Iterator<String> fieldNames = contentNode.fieldNames();
@@ -135,7 +128,7 @@ public class SurveyController {
 
     @PostMapping(path = "/invitation")
     public void sendInvitation(@ModelAttribute Invitation invitation, HttpSession httpSession) {
-        String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        String surveyId = (String) httpSession.getAttribute(Constants.CURRENT_SURVEY_ID);
         invitation.setUrl(invitation.getUrl() + "/survey/takeSurvey" + "?surveyId=" + surveyId);
         List<Invitation> invitations = new ArrayList<>();
         invitations.add(invitation);
@@ -151,5 +144,16 @@ public class SurveyController {
         surveyResult.setParticipants(survey.getParticipantNum());
         surveyResult.setParticipationRate((double) survey.getParticipantNum() / (double) survey.getInvitationNum());
         return surveyResult;
+    }
+
+    @PostMapping(path = "/submit")
+    public void submitSurvey(HttpSession httpSession) {
+        String surveyId = (String) httpSession.getAttribute(Constants.SURVEY_TO_TAKE);
+        if (null == surveyId || surveyId.isEmpty()) {
+            System.out.println("You need to take a survey firstly");
+            throw new InvalidOperationException("No survey been taken");
+        }
+        String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
+        surveyHubService.submitSurvey(surveyId, accountId);
     }
 }

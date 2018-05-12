@@ -252,7 +252,12 @@ public class SurveyHubService {
         return null;
     }
 
+
     public void submitSurvey(String surveyId, String accoundId) {
+        // No need to record submission for non-login user
+        if (null == accoundId || accoundId.isEmpty()) {
+            return;
+        }
         Optional<AccountToSurvey> maybeVal =
                 accountToSurveyRepository.findBySurveyIdAndAccountId(surveyId, accoundId);
         if (!maybeVal.isPresent()) {
@@ -263,17 +268,10 @@ public class SurveyHubService {
 
         Survey survey = getSurvey(surveyId);
         survey.setParticipantNum(survey.getParticipantNum() + 1);
-        for (Question question : survey.getQuestions()) {
-            question.getAnswers().forEach(answer -> {
-                answer.setSubmitted(true);
-            });
-        }
         surveyRepository.save(survey);
         accountToSurveyRepository.save(accountToSurvey);
-        if (null != accoundId && !accoundId.isEmpty()) {
-            Account account = getAccountById(accoundId);
-            surveyHubEmailService.sendCreateSurveyComfirmMail(account.getEmail(), surveyId);
-        }
+        Account account = getAccountById(accoundId);
+        surveyHubEmailService.sendCreateSurveyComfirmMail(account.getEmail(), surveyId);
     }
 
     private boolean hasSubmitted(String surveyId) {
