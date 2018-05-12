@@ -2,10 +2,10 @@
 <head>
     <meta charset="utf-8"/>
     <!-- Material Design fonts -->
-    <script
-            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
@@ -13,31 +13,37 @@
 
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
+    <!--
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
-      
+    -->
+
+
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+
+    <!--
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" />
+    -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
-      
-      
-      
-      
-      
+
+    <!--
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+    -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
- 
-   
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
    
 </head>
 
@@ -66,6 +72,7 @@ However, delay the fade out process for 2.5 seconds */
 	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
 	animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
+/*
 #addkeyword{
   position: absolute;
   margin-top: 10px;
@@ -75,6 +82,11 @@ However, delay the fade out process for 2.5 seconds */
   height:700px;
   margin-top: 30px;
 }
+#library1{
+    height:300px;
+    margin-left: 300px;
+}
+
 #buttonsclass{
 margin-top:20px;
 margin-left:0px;
@@ -83,12 +95,14 @@ margin-left:0px;
   margin-left: 500px;
   margin-bottom: 30px;
 }
+*/
 #logout{
 position:absolute;
 margin-left:1000px;
 width:100px;
 color:white;
 }
+/*
 #searchbutton{
   margin-left: 230px;
 
@@ -110,10 +124,6 @@ color:white;
   height:300px;
   margin-left: 300px;
 }
-#library1{
-  height:300px;
-  margin-left: 300px;
-}
 #hi{
   margin-left: 90px;
 }
@@ -124,6 +134,7 @@ color:white;
   border-style: solid;
   margin-top: 10px;
 }
+*/
 #snackbar {
 	visibility: hidden; /* Hidden by default. Visible on click */
 	min-width: 250px; /* Set a default minimum width */
@@ -138,19 +149,14 @@ color:white;
 	left: 50%; /* Center the snackbar */
 	bottom: 30px; /* 30px from the bottom */
 }
-/*
-.mdl-layout__header {
-    background-color: #333333;
-}
-.mdl-layout__tab-bar-container {
-    background-color: #333333;
-}
-*/
 </style>
-<body>
+
+<body onload="getSurvey()">
+
 <script>
     window.keywordList=[];
 </script>
+
 <script>
  function showSnackBar() {
 		// Get the snackbar DIV
@@ -174,13 +180,6 @@ color:white;
 
 
 	$(document).ready(function() {
-
-		$(function () {
-            $('#datetimepicker4').datetimepicker({
-            	 defaultDate:systemdate
-            });
-        });
-
 
 
 		// logout function
@@ -275,9 +274,10 @@ color:white;
             });
         }
 
-        $(function() {
-            $( "#expireTime" ).datepicker();
-        });
+        $( function() {
+            $( "#datepicker" ).datepicker();
+        } );
+
 		
 	});
 
@@ -304,7 +304,7 @@ color:white;
     </header>
     <main class="mdl-layout__content" style="height:800px;">
         <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-            <p>Welcome to Survey Hub</p>
+            <h1>Welcome to SurveyHub</h1>
             <script>
                 console.log("${surveyorId}");
 
@@ -314,10 +314,10 @@ color:white;
                           type: "GET",
                           url: "/account/surveys",
                           success: function (data) {
-                              var output = "<table><thead><tr><th>Survey Name</th></thead><thbody>";
-                              for (var i in data)
+                              var output = "<table class='table'><thead><tr><th scope='col'>Number</th><th scope='col'>Surveys</th></thead><thbody>";
+                              for (var key in data)
                               {
-                                  output += "<tr><td>" + data[i] + "</td></tr>";
+                                  output += "<tr><th scope='row'>" + key + "</th><td><a href='" + key + "'>" + data[key] + "</a></td></tr>";
                               }
                               output += "</tbody></table>";
 
@@ -331,7 +331,11 @@ color:white;
                   }
             </script>
 
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" type="submit" onclick="getSurvey()">List Survey</button>
+            <!--
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" type="submit" onclick="getSurvey()">
+                List Survey
+            </button>
+            -->
             <div id="questions"></div>
 
         </section>
@@ -347,7 +351,8 @@ color:white;
                         <input type="text" class="form-control" id="surveyName" name="surveyName">
                     </div>
                     <div class="form-group">
-                        Date: <input type="text" id="expireTime" name="expireTime">
+                        <label for="datepicker" class="bmd-label-floating">Expire Time</label>
+                        <input type="text" class="form-control" id="datepicker" name="expireTime">
                     </div>
                     <div class="form-group">
                         <label for="surveyType" class="bmd-label-floating">Survey Type</label>
@@ -362,7 +367,6 @@ color:white;
                     </span>
                 </form>
             </div>
-            <div id="hi"></div>
         </section>
 
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
