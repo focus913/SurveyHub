@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
@@ -35,8 +36,11 @@ public class SurveyController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/question")
-    public void saveQuestion(@RequestBody Question question, HttpSession httpSession) {
+    public void saveQuestion(@RequestBody Question question, HttpSession httpSession) throws IOException {
         String surveyId = (String) httpSession.getAttribute(CURRENT_SURVEY_ID);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(question.getQuestionContent());
+        question.setQuestionId(rootNode.get("name").asText());
         List<Question> questions = new ArrayList<>();
         questions.add(question);
         surveyHubService.saveQuestions(surveyId, questions);
@@ -104,33 +108,29 @@ public class SurveyController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/answer")
-    public void saveAnswers(@RequestBody String answersJson) throws IOException {
+    public void saveAnswer(@RequestBody String answersJson) throws IOException {
+        System.out.println("Save answer");
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> jsonMap = objectMapper.readValue(
-                answersJson, HashMap.class);
-        String surveyId = jsonMap.get(SURVEY_ID_KEY);
+        JsonNode jsonNode = objectMapper.readTree(answersJson);
+        String surveyId = jsonNode.get(SURVEY_ID_KEY).asText();
         if (null == surveyId || surveyId.isEmpty()) {
             throw new InvalidOperationException("Empty surveyId");
         }
-        String content = jsonMap.get(CONTENT_KEY);
-        if (null == content || content.isEmpty()) {
-            throw new InvalidOperationException("Empty content");
-        }
-
-        Map<String, String> answerMap = objectMapper.readValue(
-                content, HashMap.class);
-
+        JsonNode contentNode = jsonNode.get(CONTENT_KEY);
         List<Answer> answers = new ArrayList<>();
-        for (Map.Entry<String, String> entry : answerMap.entrySet()) {
-            String questonId = entry.getKey();
+        List<String> questionIds = new ArrayList<>();
+        Iterator<String> fieldNames = contentNode.fieldNames();
+
+        while (fieldNames.hasNext()) {
+            String questionId = fieldNames.next();
+            System.out.println(questionId);
+            questionIds.add(questionId);
             Answer answer = new Answer();
-            Question question = new Question();
-            question.setQuestionId(questonId);
-            answer.setQuestion(question);
-            answer.setContent(entry.getValue());
+            answer.setSurveyId(surveyId);
+            answer.setContent(contentNode.get(questionId).asText());
             answers.add(answer);
         }
-        surveyHubService.saveAnswers(answers);
+        surveyHubService.saveAnswers(answers, questionIds);
     }
 
     @PostMapping(path = "/invitation")

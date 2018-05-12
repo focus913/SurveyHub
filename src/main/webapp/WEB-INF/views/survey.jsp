@@ -45,10 +45,10 @@
     <c:forEach items="${surveyGeneral.questions}" var="question">
         console.log(${question.questionContent});
 
-        <%--/*var questionT = $.extend({}, {questionId: ${question.questionId}}, ${question.questionContent});--%>
-<%--*/--%>
-        cjson.push(${question.questionContent});
-        console.log("Inside for loop", cjson);
+    <%--/*var questionT = $.extend({}, {questionId: ${question.questionId}}, ${question.questionContent});--%>
+    <%--*/--%>
+    cjson.push(${question.questionContent});
+    console.log("Inside for loop", cjson);
 
     </c:forEach>
 

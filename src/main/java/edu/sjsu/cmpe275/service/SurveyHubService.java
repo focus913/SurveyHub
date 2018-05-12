@@ -190,7 +190,14 @@ public class SurveyHubService {
     }
 
 
-    public void saveAnswers(List<Answer> answers) {
+    public void saveAnswers(List<Answer> answers, List<String> questionIds) {
+        for (int i = 0; i < answers.size(); ++i) {
+            Answer answer = answers.get(i);
+            System.out.println(answer);
+            Question question = getQuestion(questionIds.get(i));
+            answer.setQuestion(question);
+            question.getAnswers().add(answer);
+        }
         answerRepository.saveAll(answers);
         /*for (Question question : questions) {
             Question storedQues = getQuestion(question.getQuestionId());

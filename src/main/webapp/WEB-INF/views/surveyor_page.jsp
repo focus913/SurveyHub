@@ -138,7 +138,14 @@ color:white;
 	left: 50%; /* Center the snackbar */
 	bottom: 30px; /* 30px from the bottom */
 }
-
+/*
+.mdl-layout__header {
+    background-color: #333333;
+}
+.mdl-layout__tab-bar-container {
+    background-color: #333333;
+}
+*/
 </style>
 <body>
 <script>
@@ -286,7 +293,7 @@ color:white;
             <button id="logout"class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();" style="width:200px;">
                 Log Out
             </button>
-            <span class="mdl-layout-title">Hello ${surveyorId} ! Welcom to Survey Ape!</span>
+            <span class="mdl-layout-title">SurveyHub</span>
         </div>
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
@@ -297,6 +304,7 @@ color:white;
     </header>
     <main class="mdl-layout__content" style="height:800px;">
         <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+            <p>Welcome to Survey Hub</p>
             <script>
                 console.log("${surveyorId}");
 
