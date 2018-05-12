@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/account")
@@ -92,15 +94,15 @@ public class AccountController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/surveys", produces = {"application/json"})
-    public @ResponseBody List<String> getSurveyNames(HttpSession httpSession) {
+    public @ResponseBody Map<String, String> getSurveyNames(HttpSession httpSession) {
         System.out.println("GET Surveys");
         String email = (String) httpSession.getAttribute(Constants.LOGIN_USER_NAME);
         Account account = surveyHubService.getAccountByEmail(email);
 
-        List<String> names = new ArrayList<>();
+        Map<String, String> id2name = new HashMap<>();
         for (Survey survey : account.getCreatedSurveys()) {
-            names.add(survey.getSurveyName());
+            id2name.put(survey.getSurveyId(), survey.getSurveyName());
         }
-        return names;
+        return id2name;
     }
 }
