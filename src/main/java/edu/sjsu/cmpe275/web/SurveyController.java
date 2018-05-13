@@ -102,7 +102,7 @@ public class SurveyController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/answer")
-    public void saveAnswer(@RequestBody String answersJson) throws IOException {
+    public void saveAnswer(@PathVariable String answersJson) throws IOException {
         System.out.println("Save answer");
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(answersJson);
@@ -110,6 +110,7 @@ public class SurveyController {
         if (null == surveyId || surveyId.isEmpty()) {
             throw new InvalidOperationException("Empty surveyId");
         }
+
         JsonNode contentNode = jsonNode.get(Constants.CONTENT_KEY);
         List<Answer> answers = new ArrayList<>();
         List<String> questionIds = new ArrayList<>();
@@ -195,6 +196,7 @@ public class SurveyController {
             responseRates.put(questionNumber, Double.parseDouble(format.format(responseRate).toString()));
             questionNumber++;
         }
+        surveyResult.prepareMCQ();
         model.addAttribute("surveyResult", surveyResult);
         return "survey_result";
     }

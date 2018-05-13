@@ -4,10 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SurveyResult {
     private String startTime;
@@ -15,6 +12,18 @@ public class SurveyResult {
     private int participants;
     private double participationRate;
 
+    private static final String JSON_PREFIX = "{\"chart\":{\"type\": \"pie\", \"data\":[";
+    private static final String JSON_SUFFIX = "]}}";
+
+    public Map<String, String> getMcq() {
+        return mcq;
+    }
+
+    public void setMcq(Map<String, String> mcq) {
+        this.mcq = mcq;
+    }
+
+    private Map<String, String> mcq = new HashMap();
     private Map<String, Map<String, Integer>> mcqToCount = new HashMap<>();
     private Map<String, List<String>> textAnswers = new HashMap<>();
     private Map<Integer, Double> responseRates = new LinkedHashMap<>();
@@ -61,6 +70,28 @@ public class SurveyResult {
 
     public Map<String, List<String>> getTextAnswers() {
         return textAnswers;
+    }
+
+
+    public void prepareMCQ() {
+        for (Map.Entry<String, Map<String, Integer>> each: mcqToCount.entrySet()) {
+            String key = each.getKey();
+            String jsonContent = JSON_PREFIX;
+            int size = each.getValue().size();
+            int count = 0;
+
+            for(Map.Entry<String, Integer> entry: each.getValue().entrySet()) {
+                count++;
+                jsonContent += "[\"" + entry.getKey() + "\", " + entry.getValue().toString() + "]";
+                if (count != size) {
+                    jsonContent += ", ";
+                }
+            }
+
+            jsonContent += JSON_SUFFIX;
+
+            mcq.put(key, jsonContent);
+        }
     }
 
     public void setTextAnswers(Map<String, List<String>> textAnswers) {
