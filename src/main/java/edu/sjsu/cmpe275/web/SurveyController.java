@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -136,14 +137,56 @@ public class SurveyController {
     }
 
     @GetMapping(path = "/{surveyId}/result")
-    public SurveyResult getResult(@RequestParam("surveyId") String surveyId) {
+    public String getResult(@RequestParam("surveyId") String surveyId) throws IOException {
         Survey survey = surveyHubService.getSurvey(surveyId);
         SurveyResult surveyResult = new SurveyResult();
         surveyResult.setStartTime(survey.getCreateTime().toString());
         surveyResult.setEndTime(survey.getExpireTime().toString());
         surveyResult.setParticipants(survey.getParticipantNum());
         surveyResult.setParticipationRate((double) survey.getParticipantNum() / (double) survey.getInvitationNum());
-        return surveyResult;
+
+        Map<String, Map<String, Integer>> mcqToCount = surveyResult.getMcqToCount();
+        Map<String, List<String>> textAnswers = surveyResult.getTextAnswers();
+        Map<Integer, Double> responseRates = surveyResult.getResponseRates();
+
+        int questionNumber = 1;
+        for (Question question: survey.getQuestions()) {
+            String content = question.getQuestionContent();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(content);
+            String questionContent = jsonNode.get(Constants.QUESTION).asText();
+            String type = jsonNode.get(Constants.QUESTION_TYPE).asText();
+
+            if (type.equals(Constants.MCQ)) {
+                Map<String, Integer> optionsCount = new HashMap<>();
+                Iterator<JsonNode> mcqOptions = jsonNode.get(Constants.MCQ_OPTIONS).iterator();
+
+                while (mcqOptions.hasNext()) {
+                    String mcqOption = mcqOptions.next().asText();
+                    optionsCount.put(mcqOption, 0);
+                }
+
+                for (Answer answer: question.getAnswers()) {
+                    String mcqContent = answer.getContent();
+                    optionsCount.put(mcqContent, optionsCount.get(mcqContent)+1);
+                }
+                mcqToCount.put(questionContent, optionsCount);
+            } else if (type.equals(Constants.TEXT)) {
+                List<String> testAnswers = new ArrayList<>();
+                for (Answer answer: question.getAnswers()) {
+                    testAnswers.add(answer.getContent());
+                }
+
+                textAnswers.put(questionContent, testAnswers);
+            }
+
+            Double responseRate = ((double)question.getAnswers().size())/survey.getParticipantNum();
+            DecimalFormat format = new DecimalFormat("##.00");
+
+            responseRates.put(questionNumber, Double.parseDouble(format.format(responseRate).toString()));
+            questionNumber++;
+        }
+        return "survey_result";
     }
 
     @PostMapping(path = "/submit")

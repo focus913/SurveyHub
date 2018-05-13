@@ -15,4 +15,9 @@ public class Constants {
     public final static String SURVEYOR_PAGE = "surveyor_page";
     public final static String SURVEYEE_PAGE = "surveyee_page";
     public final static String CREATE_SURVEY_PAGE = "create_survey";
+    public final static String QUESTION_TYPE = "type";
+    public final static String MCQ = "checkbox";
+    public final static String MCQ_OPTIONS = "choices";
+    public final static String TEXT = "text";
+    public final static String QUESTION = "title";
 }
