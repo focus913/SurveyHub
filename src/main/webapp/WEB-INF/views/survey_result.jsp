@@ -1,36 +1,73 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
-<body>
-<%--
-<h1>Can this part show up?</h1>
---%>
-<%--<h5 id="participantsNum"></h5>
-<script>
-    <%@ page import="edu.sjsu.cmpe275.domain.SurveyResult" %>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    var participantsNum = "${surveyR.participants}";
-    document.getElementById("participantsNum").innerHTML = participantsNum;
+    <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-base.min.js" type="text/javascript"></script>
 
-</script>--%>
+    <script>
+        <%@ page import="edu.sjsu.cmpe275.domain.SurveyResult" %>
 
-<div id="container" style="width: 500px; height: 400px;"></div>
-<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js" type="text/javascript"></script>
-<script>
-    anychart.onDocumentReady(function() {
-        // create a pie chart
-        var chart = anychart.pie([
-            ["Chocolate", 5],
-            ["Rhubarb compote", 2],
-            ["Crêpe Suzette", 2],
-            ["American blueberry", 2],
-            ["Buttermilk", 1]
-        ]);
-        chart.title("Top 5 pancake fillings");
-        // set the container where chart will be drawn
-        chart.container("container");
-        //  draw the chart on the page
-        chart.draw();
-    });
-</script>
+
+
+        // display multiple choice
+        anychart.onDocumentLoad(function () {
+            // create an instance of a pie chart
+            var chart = anychart.pie();
+            // set the data
+            chart.data([
+                ["Chocolate", 5],
+                ["Rhubarb compote", 2],
+                ["Crêpe Suzette", 2],
+                ["American blueberry", 2],
+                ["Buttermilk", 1]
+            ]);
+            // set chart title (question title)
+            chart.title("Top 5 pancake fillings");
+            // set the container element 
+            chart.container("container");
+            // initiate chart display
+            chart.draw();
+        });
+
+        
+
+    </script>
+
+</head>
+
+<body onload="">
+
+<div>
+    <!-- header -->
+    <div>
+        <h1>Survey Title</h1>
+    </div>
+
+    <!-- display multiple choice -->
+    <div id="container" style="width: 500px; height: 400px;"></div>
+
+    <!-- display short answer
+    -- use list group, each question takes one row
+    -->
+    <div class="row">
+
+    </div>
+
+    <!-- display rate question
+    -- use table, <th> for question title <td> for rate of that question
+    -->
+    <div class="row">
+
+    </div>
+
+
+</div>
+
+
+
+
+
 </body>
 </html>

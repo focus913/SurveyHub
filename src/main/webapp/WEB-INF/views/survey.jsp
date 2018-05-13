@@ -29,6 +29,8 @@
 <div id="surveyElement"></div>
 <div id="surveyResult"></div>
 
+<!-- check if content is empty -->
+
 <script>
     <%@ page import="edu.sjsu.cmpe275.domain.Survey" %>
     <%@ page import="edu.sjsu.cmpe275.domain.Answer" %>

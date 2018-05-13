@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8"/>
     <!-- Material Design fonts -->
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -13,9 +14,6 @@
 
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
-    <!--
-    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
-    -->
 
 
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -24,20 +22,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 
-    <!--
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" />
-    -->
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
-    <!--
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
-    -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
 
@@ -48,113 +39,62 @@
 </head>
 
 <style>
-.mdl-layout__content{
-	padding: 24px;
-	flex: none;
-}
-.mdl-layout__tab-bar {
-    background-color:#7faf2b !important;
-}
+    .mdl-layout__tab-bar-button{
+        background-color:#7faf2b !important;
+    }
+    .mdl-layout__content{
+        padding: 24px;
+        flex: none;
+    }
+    .mdl-layout__tab-bar {
+        background-color:#7faf2b !important;
+    }
 
-.mdl-layout__header{
-    background-color:#7faf2b !important;
-}
-
-.mdl-layout__tab-bar-button{
-    background-color:#7faf2b !important;
-}
+    .mdl-layout__header{
+        background-color:#7faf2b !important;
+    }
 
 
-#snackbar.show {
-	visibility: visible; /* Show the snackbar */
-	/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-/*
-#addkeyword{
-  position: absolute;
-  margin-top: 10px;
-  margin-left: 270px;
-}
-#library1{
-  height:700px;
-  margin-top: 30px;
-}
-#library1{
-    height:300px;
-    margin-left: 300px;
-}
+    #snackbar.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
 
-#buttonsclass{
-margin-top:20px;
-margin-left:0px;
-}
-#searchform{
-  margin-left: 500px;
-  margin-bottom: 30px;
-}
-*/
-#logout{
-position:absolute;
-margin-left:1000px;
-width:100px;
-color:white;
-}
-/*
-#searchbutton{
-  margin-left: 230px;
+    #logout{
+    position:absolute;
+    margin-left:1000px;
+    width:100px;
+    color:white;
+    }
 
-}
-#mycart{
-  margin-left: 450px;
-  margin-bottom: 40px;
-}
-#mainform{
-  margin-left: 390px;
-}
-#updatebook{
-      margin-left: 390px;
-}
-#updatebutton{
-  margin-top: 20px;
-}
-#chooselibrarian{
-  height:300px;
-  margin-left: 300px;
-}
-#hi{
-  margin-left: 90px;
-}
-#datepicker3{
-  position: fixed;
-  margin-left: 860px;
-  border-radius: 5px;
-  border-style: solid;
-  margin-top: 10px;
-}
-*/
-#snackbar {
-	visibility: hidden; /* Hidden by default. Visible on click */
-	min-width: 250px; /* Set a default minimum width */
-	margin-left: -125px; /* Divide value of min-width by 2 */
-	background-color: #333; /* Black background color */
-	color: #fff; /* White text color */
-	text-align: center; /* Centered text */
-	border-radius: 2px; /* Rounded borders */
-	padding: 16px; /* Padding */
-	position: fixed; /* Sit on top of the screen */
-	z-index: 1; /* Add a z-index if needed */
-	left: 50%; /* Center the snackbar */
-	bottom: 30px; /* 30px from the bottom */
-}
+
+    #snackbar {
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 250px; /* Set a default minimum width */
+        margin-left: -125px; /* Divide value of min-width by 2 */
+        background-color: #333; /* Black background color */
+        color: #fff; /* White text color */
+        text-align: center; /* Centered text */
+        border-radius: 2px; /* Rounded borders */
+        padding: 16px; /* Padding */
+        position: fixed; /* Sit on top of the screen */
+        z-index: 1; /* Add a z-index if needed */
+        left: 50%; /* Center the snackbar */
+        bottom: 30px; /* 30px from the bottom */
+    }
 </style>
 
-<body onload="getSurvey()">
+<body onload="getEverything()">
 
 <script>
     window.keywordList=[];
+    function getEverything() {
+        getSurvey();
+        getReport();
+    }
 </script>
 
 <script>
@@ -314,10 +254,10 @@ color:white;
                           type: "GET",
                           url: "/account/surveys",
                           success: function (data) {
-                              var output = "<table class='table'><thead><tr><th scope='col'>Number</th><th scope='col'>Surveys</th></thead><thbody>";
+                              var output = "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Survey</th></thead><thbody>";
                               for (var key in data)
                               {
-                                  output += "<tr><th scope='row'>" + key + "</th><td><a href='" + key + "'>" + data[key] + "</a></td></tr>";
+                                  output += "<tr><th scope='row'>" + key + "</th><td><a href='/survey/" + key + "'>" + data[key] + "</a></td></tr>";
                               }
                               output += "</tbody></table>";
 
@@ -331,11 +271,7 @@ color:white;
                   }
             </script>
 
-            <!--
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" type="submit" onclick="getSurvey()">
-                List Survey
-            </button>
-            -->
+
             <div id="questions"></div>
 
         </section>
@@ -371,8 +307,32 @@ color:white;
 
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
             <p>Feature not implemented</p>
-            <div class="page-content" id="library1" style="margin-left:20%">
-            </div>
+
+            <script>
+                function getReport() {
+                    var report = $('#report');
+                    $.ajax({
+                        type: "GET",
+                        url: "/account/surveys",
+                        success: function (data) {
+                            var output = "<table class='table'><thead><tr><th scope='col'>ID</th><th scope='col'>Survey</th></thead><thbody>";
+                            for (var key in data)
+                            {
+                                output += "<tr><th scope='row'>" + key + "</th><td><a href='/survey/" + key + "/result'>" + data[key] + "</a></td></tr>";
+                            }
+                            output += "</tbody></table>";
+
+                            report.html(output);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("error");
+                        },
+                        dataType: "json"
+                    });
+                }
+            </script>
+
+            <div id="report"></div>
 
         <!-- Your content goes here -->
         </section>

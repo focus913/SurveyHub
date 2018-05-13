@@ -112,7 +112,7 @@ $(document).ready(function() {
 <body>
 <form   id="userVerificationForm" style="margin-left:450px;margin-top:200px;">
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" name ="verifyCode" id="verifyCode">
+        <input class="mdl-textfield__input" type="text" name ="verifyCode" id="verifyCode" autofocus>
         <label class="mdl-textfield__label" for="verifyCode">Confirmation Code</label>
         <span class="mdl-textfield__error">Enter Verify Code</span>
     </div>
