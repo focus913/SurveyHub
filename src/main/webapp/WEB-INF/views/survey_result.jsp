@@ -9,10 +9,7 @@
 
 
     <script>
-
         <%@ page import="edu.sjsu.cmpe275.domain.SurveyResult" %>
-
-
 
         var startTime = "${surveyResult.startTime}";
         var endTime = "${surveyResult.endTime}";
@@ -28,31 +25,25 @@
         var textAnswers = {};
         var responseRates = {};
 
+        mcqToCount = "${surveyResult.mcqToCount}";
+        console.log(mcqToCount);
+
+        var sb = ${surveyResult.sb};
+        console.log(sb);
 
 
-
-        /*
         // display multiple choice
         anychart.onDocumentLoad(function () {
-            // create an instance of a pie chart
-            var chart = anychart.pie();
-            // set the data
-            chart.data([
-                ["Chocolate", 5],
-                ["Rhubarb compote", 2],
-                ["Crêpe Suzette", 2],
-                ["American blueberry", 2],
-                ["Buttermilk", 1]
-            ]);
-            // set chart title (question title)
-            chart.title("Top 5 pancake fillings");
-            // set the container element 
-            chart.container("container");
-            // initiate chart display
-            chart.draw();
+
+            var json = sb;
+            var json1 = sb;
+            // create chart from json config
+            var chart = anychart.fromJson(json);
+            var chart1 = anychart.fromJson(json1);
+            // display a chart
+            chart.container('container').draw();
+            chart1.container('container1').draw();
         });
-        */
-        
 
     </script>
 
@@ -67,47 +58,37 @@
         <h1>Survey Result</h1>
     </div>
     <div class="row">
-        <div class="col-3">
-            <h2>Start Time:</h2>
-            <p id="startTime"></p>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th scope="row">Start Time</th>
+                <td id="startTime"></td>
+            </tr>
+            <tr>
+                <th scope="row">End Time</th>
+                <td id="endTime"></td>
+            </tr>
+            <tr>
+                <th scope="row">Number of Participants</th>
+                <td id="participants"></td>
+            </tr>
+            <tr>
+                <th scope="row">Participation Rate</th>
+                <td id="participationRate"></td>
+            </tr>
+            </tbody>
+        </table>
 
-            <script>
 
-                document.getElementById("startTime").innerHTML = startTime;
+        <script>
 
-            </script>
-        </div>
-        <div class="col-3">
-            <h2>End Time:</h2>
-            <p id="endTime"></p>
+            document.getElementById("startTime").innerHTML = startTime;
+            document.getElementById("endTime").innerHTML = endTime;
+            document.getElementById("participants").innerHTML = participants;
+            document.getElementById("participationRate").innerHTML = participationRate;
 
-            <script>
+        </script>
 
-                document.getElementById("endTime").innerHTML = endTime;
-
-            </script>
-        </div>
-        <div class="col-3">
-            <h2>Number of Participants:</h2>
-            <p id="participants"></p>
-
-            <script>
-
-                document.getElementById("participants").innerHTML = participants;
-
-            </script>
-        </div>
-
-        <div class="col-3">
-            <h2>Participation Rate:</h2>
-            <p id="participationRate"></p>
-
-            <script>
-
-                document.getElementById("participationRate").innerHTML = participationRate;
-
-            </script>
-        </div>
     </div>
 
 
@@ -122,8 +103,9 @@
         </script>
     </div>
 
-    <!-- display multiple choice
-    <div id="container" style="width: 500px; height: 400px;"></div>-->
+    <!-- display multiple choice -->
+    <div id="container" style="width: 500px; height: 400px;"></div>
+    <div id="container1" style="width: 500px; height: 400px;"></div>
 
 
 
