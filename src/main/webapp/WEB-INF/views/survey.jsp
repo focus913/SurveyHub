@@ -31,6 +31,8 @@
 
 <script>
     <%@ page import="edu.sjsu.cmpe275.domain.Survey" %>
+    <%@ page import="edu.sjsu.cmpe275.domain.Answer" %>
+    <%@ page import="edu.sjsu.cmpe275.domain.Question" %>
 
     var surveyId = "${surveyGeneral.surveyId}";
 
@@ -38,21 +40,31 @@
 
     var rJson = {
         surveyId : surveyId
-    }
+    };
 
     var cjson = [];
 
+    var initData = {};
     <c:forEach items="${surveyGeneral.questions}" var="question">
-        console.log(${question.questionContent});
-
-    <%--/*var questionT = $.extend({}, {questionId: ${question.questionId}}, ${question.questionContent});--%>
-    <%--*/--%>
+    console.log(${question.questionContent});
     cjson.push(${question.questionContent});
     console.log("Inside for loop", cjson);
-
+    var questionId = "${question.questionId}";
+    console.log("question id: ", questionId);
+    <c:forEach items="${question.answers}" var="answer">
+    console.log("answer surveyId: ", surveyId);
+    var answerContent = "${answer.content}";
+    console.log("answer content: ", answerContent);
+    initData[questionId] = answerContent;
+    </c:forEach>
     </c:forEach>
 
     console.log("outside for loop", cjson);
+
+    function loadState(survey) {
+        survey.data = initData;
+        console.log("survey.data = ", initData);
+    }
 
     Survey
         .StylesManager
@@ -99,6 +111,8 @@
             console.log("sResult is ", sResult);
             rJson.content = sResult;
 
+            console.log("survey", survey);
+
             console.log("stringify rJson: ", JSON.stringify(rJson));
 
             var xhr = new XMLHttpRequest();
@@ -109,6 +123,9 @@
             document
                 .querySelector('#surveyResult')
         });
+
+    //Load the initial state
+    loadState(survey);
 
     $("#surveyElement").Survey({
         model: survey,

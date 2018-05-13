@@ -121,7 +121,12 @@ public class SurveyController {
             questionIds.add(questionId);
             Answer answer = new Answer();
             answer.setSurveyId(surveyId);
-            answer.setContent(contentNode.get(questionId).asText());
+            if (contentNode.get(questionId).isArray()) {
+                if (contentNode.get(questionId).iterator().hasNext())
+                    answer.setContent(contentNode.get(questionId).toString());
+            } else {
+                answer.setContent(contentNode.get(questionId).asText());
+            }
             answers.add(answer);
         }
         surveyHubService.saveAnswers(answers, questionIds);
@@ -168,7 +173,11 @@ public class SurveyController {
 
                 for (Answer answer: question.getAnswers()) {
                     String mcqContent = answer.getContent();
-                    optionsCount.put(mcqContent, optionsCount.get(mcqContent)+1);
+                    String[] options = mcqContent.substring(1,mcqContent.length()-1).split(",");
+                    for (String option: options) {
+                        String keyOption = option.substring(1, option.length()-1);
+                        optionsCount.put(keyOption, optionsCount.get(keyOption)+1);
+                    }
                 }
                 mcqToCount.put(questionContent, optionsCount);
             } else if (type.equals(Constants.TEXT)) {
