@@ -137,7 +137,7 @@ public class SurveyController {
     }
 
     @GetMapping(path = "/{surveyId}/result")
-    public String getResult(@RequestParam("surveyId") String surveyId) throws IOException {
+    public String getResult(@RequestParam("surveyId") String surveyId, ModelMap model) throws IOException {
         Survey survey = surveyHubService.getSurvey(surveyId);
         SurveyResult surveyResult = new SurveyResult();
         surveyResult.setStartTime(survey.getCreateTime().toString());
@@ -186,6 +186,7 @@ public class SurveyController {
             responseRates.put(questionNumber, Double.parseDouble(format.format(responseRate).toString()));
             questionNumber++;
         }
+        model.addAttribute("surveyResult", surveyResult);
         return "survey_result";
     }
 
