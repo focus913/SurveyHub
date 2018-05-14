@@ -239,7 +239,8 @@ public class SurveyHubService {
             boolean duplicate = false;
             for (Answer existed : question.getAnswers()) {
                 if (existed.getSurveyId().equals(answer.getSurveyId())
-                        && existed.getAccountId().equals(accountId)) {
+                        && accountId != null && !accountId.isEmpty()
+                        && accountId.equals(existed.getAccountId())) {
                     existed.setContent(answer.getContent());
                     toSave.add(existed);
                     duplicate = true;
