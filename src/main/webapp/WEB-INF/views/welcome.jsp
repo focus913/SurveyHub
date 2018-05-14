@@ -33,6 +33,21 @@
 
 
     function getSurvey() {
+
+        // $.ajax({
+        //     type: "GET",
+        //     url: "/survey/getSurvey",
+        //     statusCode: {
+        //         200: function () {
+        //             window.location = "/survey/getSurvey";
+        //         },
+        //         400: function () {
+        //             alert("Survey Expired");
+        //         }
+        //
+        //     }
+        // });
+
         window.location = "/survey/getSurvey";
 
     }

@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,31 +34,55 @@
 
 <script>
     <%@ page import="edu.sjsu.cmpe275.domain.Survey" %>
-    <%@ page import="edu.sjsu.cmpe275.domain.Answer" %>
-    <%@ page import="edu.sjsu.cmpe275.domain.Question" %>
 
     var surveyId = "${surveyGeneral.surveyId}";
 
     var surveyName = "${surveyGeneral.surveyName}";
+
+    var accountId = "";
+
+    <c:catch var="exception">${surveyGeneral.accountId}</c:catch>
+    <c:choose>
+    <c:when test="${not empty exception}">
+    console.log("accountId not available.");
+    </c:when>
+    <c:otherwise>
+    accountId = "${surveyGeneral.accountId}";
+    </c:otherwise>
+    </c:choose>
+
+
 
     var rJson = {
         surveyId : surveyId
     };
 
     var cjson = [];
+    var initData = {};
 
     var initData = {};
     <c:forEach items="${surveyGeneral.questions}" var="question">
     console.log(${question.questionContent});
-    cjson.push(${question.questionContent});
+    var qContent = ${question.questionContent};
+    cjson.push(qContent);
     console.log("Inside for loop", cjson);
+
     var questionId = "${question.questionId}";
     console.log("question id: ", questionId);
     <c:forEach items="${question.answers}" var="answer">
     console.log("answer surveyId: ", surveyId);
-    var answerContent = "${answer.content}";
-    console.log("answer content: ", answerContent);
-    initData[questionId] = answerContent;
+    <c:if test="${not empty answer.content}">
+    <c:choose>
+    <c:when test="${fn:containsIgnoreCase(question.questionContent, 'checkbox')}">
+    console.log("answer content: ", ${answer.content});
+    initData[questionId] = ${answer.content};
+    </c:when>
+    <c:otherwise>
+    console.log("answer content: ", "${answer.content}");
+    initData[questionId] = "${answer.content}";
+    </c:otherwise>
+    </c:choose>
+    </c:if>
     </c:forEach>
     </c:forEach>
 
@@ -66,6 +91,22 @@
     function loadState(survey) {
         survey.data = initData;
         console.log("survey.data = ", initData);
+    }
+
+    function saveState(survey) {
+        //Here should be the code to save the data into your database
+        console.log("sResult is ", sResult);
+        rJson.content = sResult;
+
+        console.log("survey", survey);
+
+        console.log("stringify rJson: ", JSON.stringify(rJson));
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/survey/answer");
+        xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xhr.send(JSON.stringify(rJson));
+
     }
 
     Survey
@@ -106,10 +147,10 @@
     });
 
 
-
     survey
         .onComplete
         .add(function () {
+            console.log("inside the com");
             console.log("sResult is ", sResult);
             rJson.content = sResult;
 
@@ -118,7 +159,7 @@
             console.log("stringify rJson: ", JSON.stringify(rJson));
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/survey/answer");
+            xhr.open("POST", "/survey/submit");
             xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
             xhr.send(JSON.stringify(rJson));
 
@@ -129,6 +170,12 @@
     //Load the initial state
     loadState(survey);
 
+    //save the data every 10 seconds, it is a good idea to change it to 30-60 seconds or more.
+    timerId = window.setInterval(function () {
+        if(accountId)
+            saveState(survey);
+    }, 10000);
+
     $("#surveyElement").Survey({
         model: survey,
         onValueChanged: surveyValueChanged
@@ -138,3 +185,4 @@
 </body>
 
 </html>
+
