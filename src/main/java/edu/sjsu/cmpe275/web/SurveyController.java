@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sjsu.cmpe275.domain.*;
 import edu.sjsu.cmpe275.exceptions.InvalidOperationException;
+import edu.sjsu.cmpe275.exceptions.SurveyExpiredException;
 import edu.sjsu.cmpe275.service.Constants;
 import edu.sjsu.cmpe275.service.SurveyHubService;
 import org.apache.tomcat.util.bcel.Const;
@@ -83,18 +84,30 @@ public class SurveyController {
         return Constants.TAKE_SURVEY_PAGE;
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/getSurvey", produces = {"application/json"})
     public String getSurvey(HttpSession httpSession, ModelMap model) {
         String surveyId = (String) httpSession.getAttribute(Constants.SURVEY_TO_TAKE);
+        String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
         System.out.println("GetSurvey " + surveyId);
         Survey survey = surveyHubService.getSurvey(surveyId);
+        Date now = new Date();
+        if (survey.getExpireTime().before(now)) {
+            throw new SurveyExpiredException("Survey expired");
+        }
+        if (null != accountId && !accountId.isEmpty()) {
+            survey.setNeedSave(true);
+        }
         model.addAttribute("surveyGeneral", survey);
         return "survey";
     }
 
     // na 05/08/2018
     @GetMapping(path = "/{surveyId}")
-    public String getSurvey(@PathVariable("surveyId") String surveyId, ModelMap model) {
+    public String getSurvey(@PathVariable("surveyId") String surveyId,
+                            ModelMap model,
+                            HttpSession httpSession) {
+        httpSession.setAttribute(Constants.SURVEY_TO_TAKE, surveyId);
         Survey s = surveyHubService.getSurvey(surveyId);
         model.addAttribute("surveyGeneral", s);
         return "survey";

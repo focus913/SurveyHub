@@ -34,7 +34,7 @@ public class SurveyHubExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SurveyExpiredException.class)
     public final ResponseEntity<SurveyExpiredException>
     handleSurveyExpiredException(SurveyExpiredException ex, WebRequest request) {
-        return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SurveyUnwritableException.class)

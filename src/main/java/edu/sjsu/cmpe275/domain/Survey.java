@@ -63,6 +63,8 @@ public class Survey {
     @Column(name = "invitation_num", nullable = false)
     private int invitationNum;
 
+    private boolean needSave;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
     List<Question> questions = new ArrayList<>();
 
@@ -160,10 +162,19 @@ public class Survey {
         this.surveyName = name;
     }
 
+    public boolean isNeedSave() {
+        return needSave;
+    }
+
+    public void setNeedSave(boolean needSave) {
+        this.needSave = needSave;
+    }
+
     public Survey() {
         this.surveyId = "survey_" + UUID.randomUUID().toString().replaceAll("-", "");
         this.status = SurveyStatus.EDITTING;
         this.participantNum = 0;
         this.invitationNum = 0;
+        this.needSave = false;
     }
 }
