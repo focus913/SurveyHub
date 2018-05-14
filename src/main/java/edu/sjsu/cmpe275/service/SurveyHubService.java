@@ -245,7 +245,7 @@ public class SurveyHubService {
                     duplicate = true;
                 }
             }
-            if (!duplicate) {
+            if (null == accountId || accountId.isEmpty() || !duplicate) {
                 answer.setQuestion(question);
                 question.getAnswers().add(answer);
                 toSave.add(answer);

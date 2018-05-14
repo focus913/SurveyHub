@@ -92,6 +92,7 @@ public class SurveyController {
         String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
         Survey survey = surveyHubService.getSurvey(surveyId);
         survey.setUsingAccount(accountId);
+        surveyHubService.checkSurvey(accountId, survey);
         model.addAttribute("surveyGeneral", survey);
         return "survey";
     }
