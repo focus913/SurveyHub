@@ -102,7 +102,7 @@ public class SurveyController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/answer")
-    public void saveAnswer(@PathVariable String answersJson) throws IOException {
+    public void saveAnswer(@RequestBody String answersJson) throws IOException {
         System.out.println("Save answer");
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(answersJson);
@@ -143,7 +143,7 @@ public class SurveyController {
     }
 
     @GetMapping(path = "/{surveyId}/result")
-    public String getResult(@RequestParam("surveyId") String surveyId, ModelMap model) throws IOException {
+    public String getResult(@PathVariable("surveyId") String surveyId, ModelMap model) throws IOException {
         Survey survey = surveyHubService.getSurvey(surveyId);
         SurveyResult surveyResult = new SurveyResult();
         surveyResult.setStartTime(survey.getCreateTime().toString());

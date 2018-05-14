@@ -25,25 +25,37 @@
         var textAnswers = {};
         var responseRates = {};
 
-        mcqToCount = "${surveyResult.mcqToCount}";
-        console.log(mcqToCount);
 
-        var sb = ${surveyResult.sb};
-        console.log(sb);
+
+
 
 
         // display multiple choice
-        anychart.onDocumentLoad(function () {
+        var questions = [];
+        var answers = [];
+        <c:forEach items="${surveyResult.mcq}" var="mcq">
+            var i = 0;
+            questions.push("${mcq.key}");
+            answers.push(${mcq.value});
 
-            var json = sb;
-            var json1 = sb;
-            // create chart from json config
-            var chart = anychart.fromJson(json);
-            var chart1 = anychart.fromJson(json1);
-            // display a chart
-            chart.container('container').draw();
-            chart1.container('container1').draw();
-        });
+            console.log("Question: ", "${mcq.key}");
+            console.log("Data: ", ${mcq.value});
+
+            anychart.onDocumentLoad(function () {
+
+                var json = ${mcq.value};
+                // create chart from json config
+                var chart = anychart.fromJson(json);
+                // display a chart
+                chart.title("${mcq.key}");
+                console.log(i);
+                chart.container('container' + i).draw();
+
+            });
+            i += 1;
+        </c:forEach>
+
+
 
     </script>
 
@@ -91,6 +103,18 @@
 
     </div>
 
+    <!-- display multiple choice -->
+
+    <div id="container1" style="width: 500px; height: 400px;"></div>
+    <div id="container2" style="width: 500px; height: 400px;"></div>
+    <div id="container3" style="width: 500px; height: 400px;"></div>
+    <div id="container4" style="width: 500px; height: 400px;"></div>
+    <div id="container5" style="width: 500px; height: 400px;"></div>
+    <div id="container6" style="width: 500px; height: 400px;"></div>
+    <div id="container7" style="width: 500px; height: 400px;"></div>
+    <div id="container8" style="width: 500px; height: 400px;"></div>
+    <div id="container9" style="width: 500px; height: 400px;"></div>
+    <div id="container10" style="width: 500px; height: 400px;"></div>
 
     <!-- display short answer
     -- use list group, each question takes one row
@@ -102,10 +126,6 @@
 
         </script>
     </div>
-
-    <!-- display multiple choice -->
-    <div id="container" style="width: 500px; height: 400px;"></div>
-    <div id="container1" style="width: 500px; height: 400px;"></div>
 
 
 
