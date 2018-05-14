@@ -113,6 +113,10 @@ public class SurveyController {
     @PostMapping(path = "/answer")
     public void saveAnswer(@RequestBody String answersJson) throws IOException {
         System.out.println("Save answer");
+        saveAnswerInternal(answersJson);
+    }
+
+    private void saveAnswerInternal(String answersJson) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(answersJson);
         String surveyId = jsonNode.get(Constants.SURVEY_ID_KEY).asText();
@@ -216,13 +220,15 @@ public class SurveyController {
     }
 
     @PostMapping(path = "/submit")
-    public void submitSurvey(HttpSession httpSession) {
+    public void submitSurvey(@RequestBody String answersJson, HttpSession httpSession) throws IOException {
+        System.out.println("Submit Survey");
         String surveyId = (String) httpSession.getAttribute(Constants.SURVEY_TO_TAKE);
         if (null == surveyId || surveyId.isEmpty()) {
             System.out.println("You need to take a survey firstly");
             throw new InvalidOperationException("No survey been taken");
         }
         String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
+        saveAnswerInternal(answersJson);
         surveyHubService.submitSurvey(surveyId, accountId);
     }
 }
