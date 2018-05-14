@@ -280,6 +280,10 @@ public class SurveyHubService {
 
 
     public void submitSurvey(String surveyId, String accoundId) {
+        Survey survey = getSurvey(surveyId);
+        survey.setParticipantNum(survey.getParticipantNum() + 1);
+        surveyRepository.save(survey);
+
         // No need to record submission for non-login user
         if (null == accoundId || accoundId.isEmpty()) {
             return;
@@ -292,9 +296,6 @@ public class SurveyHubService {
         AccountToSurvey accountToSurvey = maybeVal.get();
         accountToSurvey.setSubmitted(true);
 
-        Survey survey = getSurvey(surveyId);
-        survey.setParticipantNum(survey.getParticipantNum() + 1);
-        surveyRepository.save(survey);
         accountToSurveyRepository.save(accountToSurvey);
         Account account = getAccountById(accoundId);
         surveyHubEmailService.sendCreateSurveyComfirmMail(account.getEmail(), surveyId);
