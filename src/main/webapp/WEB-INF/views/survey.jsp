@@ -54,11 +54,11 @@
 
 
     var rJson = {
-        surveyId : surveyId
+        surveyId : surveyId,
+        accountId : accountId
     };
 
     var cjson = [];
-    var initData = {};
 
     var initData = {};
     <c:forEach items="${surveyGeneral.questions}" var="question">
@@ -163,6 +163,9 @@
             xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
             xhr.send(JSON.stringify(rJson));
 
+            // after submit, clear timer
+            window.clearInterval(timerId);
+
             document
                 .querySelector('#surveyResult')
         });
@@ -185,4 +188,3 @@
 </body>
 
 </html>
-

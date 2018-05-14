@@ -93,23 +93,12 @@
 
     </div>
 
-    <!-- display multiple choice -->
 
-    <div id="container1" style="width: 500px; height: 400px;"></div>
-    <div id="container2" style="width: 500px; height: 400px;"></div>
-    <div id="container3" style="width: 500px; height: 400px;"></div>
-    <%--<div id="container4" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container5" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container6" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container7" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container8" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container9" style="width: 500px; height: 400px;"></div>--%>
-    <%--<div id="container10" style="width: 500px; height: 400px;"></div>--%>
 
     <!-- display short answer
     -- use list group, each question takes one row
     -->
-    <div id="shortanswer"></div>
+    <div id="shortanswer" class="row"></div>
     <script>
         // display short answer
         var saquestions = [];
@@ -144,23 +133,38 @@
     <!-- display rate question
     -- use table, <th> for question title <td> for rate of that question
     -->
-    <div id="responserate"></div>
+    <div id="responserate" class="row"></div>
     <script>
-        var str = '<table><thead><tr><th>#</th><th>Response Rate</th></tr></thread><tbody>';
+        var str = '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">Response Rate</th></tr></thread><tbody>';
         <%--var s = "${surveyResult.responseRates}";--%>
         <%--console.log("s:", s);--%>
 
         <c:forEach items="${surveyResult.responseRates}" var="responseRates">
             console.log(${responseRates.key});
-            str += '<td>' + ${responseRates.key} + '</td><td>' + "${responseRates.value}" + '</td>';
+            str += '<tr><td>' + ${responseRates.key} + '</td><td>' + "${responseRates.value}" + '</td></tr>';
         </c:forEach>
         str += '</tbody></table>';
         console.log(str);
         document.getElementById("responserate").innerHTML = str;
     </script>
 
+    <!-- display multiple choice -->
+
+    <div id="container1" style="width: 500px; height: 400px;"></div>
+    <div id="container2" style="width: 500px; height: 400px;"></div>
+    <div id="container3" style="width: 500px; height: 400px;"></div>
+    <%--<div id="container4" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container5" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container6" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container7" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container8" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container9" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container10" style="width: 500px; height: 400px;"></div>--%>
+
 
 </div>
+
+
 
 
 
