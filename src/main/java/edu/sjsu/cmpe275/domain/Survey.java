@@ -63,7 +63,9 @@ public class Survey {
     @Column(name = "invitation_num", nullable = false)
     private int invitationNum;
 
-    private boolean needSave;
+    private String usingAccount;
+
+    private boolean protectMode;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
     List<Question> questions = new ArrayList<>();
@@ -162,12 +164,20 @@ public class Survey {
         this.surveyName = name;
     }
 
-    public boolean isNeedSave() {
-        return needSave;
+    public String getUsingAccount() {
+        return usingAccount;
     }
 
-    public void setNeedSave(boolean needSave) {
-        this.needSave = needSave;
+    public void setUsingAccount(String usingAccount) {
+        this.usingAccount = usingAccount;
+    }
+
+    public boolean isProtectMode() {
+        return protectMode;
+    }
+
+    public void setProtectMode(boolean protectMode) {
+        this.protectMode = protectMode;
     }
 
     public Survey() {
@@ -175,6 +185,6 @@ public class Survey {
         this.status = SurveyStatus.EDITTING;
         this.participantNum = 0;
         this.invitationNum = 0;
-        this.needSave = false;
+        this.protectMode = false;
     }
 }

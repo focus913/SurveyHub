@@ -88,16 +88,10 @@ public class SurveyController {
     @GetMapping(path = "/getSurvey", produces = {"application/json"})
     public String getSurvey(HttpSession httpSession, ModelMap model) {
         String surveyId = (String) httpSession.getAttribute(Constants.SURVEY_TO_TAKE);
-        String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
         System.out.println("GetSurvey " + surveyId);
+        String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
         Survey survey = surveyHubService.getSurvey(surveyId);
-        Date now = new Date();
-        if (survey.getExpireTime().before(now)) {
-            throw new SurveyExpiredException("Survey expired");
-        }
-        if (null != accountId && !accountId.isEmpty()) {
-            survey.setNeedSave(true);
-        }
+        survey.setUsingAccount(accountId);
         model.addAttribute("surveyGeneral", survey);
         return "survey";
     }
@@ -108,7 +102,9 @@ public class SurveyController {
                             ModelMap model,
                             HttpSession httpSession) {
         httpSession.setAttribute(Constants.SURVEY_TO_TAKE, surveyId);
+        String accountId = (String) httpSession.getAttribute(Constants.LOGIN_USER_KEY);
         Survey s = surveyHubService.getSurvey(surveyId);
+        surveyHubService.checkSurvey(accountId, s);
         model.addAttribute("surveyGeneral", s);
         return "survey";
     }
@@ -123,6 +119,7 @@ public class SurveyController {
         if (null == surveyId || surveyId.isEmpty()) {
             throw new InvalidOperationException("Empty surveyId");
         }
+        String accountId = jsonNode.get(Constants.ACCOUNT_ID).asText();
 
         JsonNode contentNode = jsonNode.get(Constants.CONTENT_KEY);
         List<Answer> answers = new ArrayList<>();
@@ -131,10 +128,10 @@ public class SurveyController {
 
         while (fieldNames.hasNext()) {
             String questionId = fieldNames.next();
-            System.out.println(questionId);
             questionIds.add(questionId);
             Answer answer = new Answer();
             answer.setSurveyId(surveyId);
+            answer.setAccountId(accountId);
             if (contentNode.get(questionId).isArray()) {
                 if (contentNode.get(questionId).iterator().hasNext())
                     answer.setContent(contentNode.get(questionId).toString());
@@ -143,7 +140,7 @@ public class SurveyController {
             }
             answers.add(answer);
         }
-        surveyHubService.saveAnswers(answers, questionIds);
+        surveyHubService.saveAnswers(accountId, answers, questionIds);
     }
 
     @PostMapping(path = "/invitation")

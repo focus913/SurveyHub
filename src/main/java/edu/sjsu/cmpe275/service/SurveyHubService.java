@@ -76,12 +76,47 @@ public class SurveyHubService {
         questionRepository.deleteById(question.getQuestionId());
     }
 
+    public void checkSurvey(String accountId, Survey survey) {
+        boolean hasAccount = null != accountId && !accountId.isEmpty();
+        for (Question question : survey.getQuestions()) {
+            if (hasAccount) {
+                List<Answer> answers = new ArrayList<>();
+                for (Answer answer : question.getAnswers()) {
+                    if (accountId.equals(answer.getAccountId())) {
+                        answers.add(answer);
+                    }
+                }
+                question.setAnswers(answers);
+            } else {
+                question.getAnswers().clear();
+            }
+        }
+
+        if (!hasAccount) {
+            survey.setProtectMode(true);
+            return;
+        }
+
+        Optional<AccountToSurvey> maybeVal =
+                accountToSurveyRepository.findBySurveyIdAndAccountId(survey.getSurveyId(), accountId);
+        if (!maybeVal.isPresent()) {
+            return;
+        }
+        AccountToSurvey val = maybeVal.get();
+        survey.setProtectMode(val.isSubmitted());
+    }
+
     public Survey getSurvey(String surveyId) {
         Optional<Survey> maybeSurvey = surveyRepository.findById(surveyId);
         if (!maybeSurvey.isPresent()) {
             throw new SurveyNotExistException("Survey with id: " + surveyId + " not exist");
         }
-        return maybeSurvey.get();
+        Survey survey = maybeSurvey.get();
+        Date now = new Date();
+        if (survey.getExpireTime().before(now)) {
+            throw new SurveyExpiredException("Survey expired");
+        }
+        return survey;
     }
 
     public void updateSurvyStatus(String surveyId, Survey.Action action, Date newDueDate) {
@@ -189,44 +224,34 @@ public class SurveyHubService {
         accountRepository.save(account);
     }
 
-
-    public void saveAnswers(List<Answer> answers, List<String> questionIds) {
+    public void saveAnswers(String accountId, List<Answer> answers, List<String> questionIds) {
+        Map<String, Question> questionMap = new HashMap<>();
+        List<Answer> toSave = new ArrayList<>();
         for (int i = 0; i < answers.size(); ++i) {
             Answer answer = answers.get(i);
-            System.out.println(answer);
-            Question question = getQuestion(questionIds.get(i));
-            answer.setQuestion(question);
-            question.getAnswers().add(answer);
-        }
-        answerRepository.saveAll(answers);
-        /*for (Question question : questions) {
-            Question storedQues = getQuestion(question.getQuestionId());
-            // One question for one answer
-            if (question.getAnswers().size() != 1) {
-                throw new InvalidOperationException("One question can only have one ");
+            Question question;
+            if (!questionMap.containsKey(questionIds.get(i))) {
+                question = getQuestion(questionIds.get(i));
+                questionMap.put(questionIds.get(i), question);
+            } else {
+                question = questionMap.get(questionIds.get(i));
             }
-            Answer newAns = question.getAnswers().get(0);
-            // Update existed answer
-            boolean existed = false;
-            for (Answer answer : storedQues.getAnswers()) {
-                if (answer.getAccountId().equals(newAns.getAccountId())
-                        && answer.getSurveyId().equals(newAns.getSurveyId())
-                        && answer.getQuestion().getQuestionId().equals(question.getQuestionId())) {
-                    answer.setContent(newAns.getContent());
-                    existed = true;
-                    break;
+            boolean duplicate = false;
+            for (Answer existed : question.getAnswers()) {
+                if (existed.getSurveyId().equals(answer.getSurveyId())
+                        && existed.getAccountId().equals(accountId)) {
+                    existed.setContent(answer.getContent());
+                    toSave.add(existed);
+                    duplicate = true;
                 }
             }
-            if (!existed) {
-                newAns.setQuestion(question);
-                newAns.setSubmitted(false);
-                newAns.setSurveyId(surveyId);
-                newAns.setAccountId(accountId);
-                newAns.setQuestion(storedQues);
-                storedQues.getAnswers().add(newAns);
+            if (!duplicate) {
+                answer.setQuestion(question);
+                question.getAnswers().add(answer);
+                toSave.add(answer);
             }
-            questionRepository.save(storedQues);
-        }*/
+        }
+        answerRepository.saveAll(toSave);
     }
 
     public Question getQuestion(String questionId) {
