@@ -26,7 +26,7 @@ public class SurveyResult {
     private Map<String, String> mcq = new HashMap();
     private Map<String, Map<String, Integer>> mcqToCount = new HashMap<>();
     private Map<String, List<String>> textAnswers = new HashMap<>();
-    private Map<Integer, Double> responseRates = new LinkedHashMap<>();
+    private Map<Integer, String> responseRates = new LinkedHashMap<>();
 
     public String getStartTime() {
         return startTime;
@@ -98,11 +98,11 @@ public class SurveyResult {
         this.textAnswers = textAnswers;
     }
 
-    public Map<Integer, Double> getResponseRates() {
+    public Map<Integer, String> getResponseRates() {
         return responseRates;
     }
 
-    public void setResponseRates(Map<Integer, Double> responseRates) {
+    public void setResponseRates(Map<Integer, String> responseRates) {
         this.responseRates = responseRates;
     }
 }

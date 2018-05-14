@@ -153,7 +153,7 @@ public class SurveyController {
 
         Map<String, Map<String, Integer>> mcqToCount = surveyResult.getMcqToCount();
         Map<String, List<String>> textAnswers = surveyResult.getTextAnswers();
-        Map<Integer, Double> responseRates = surveyResult.getResponseRates();
+        Map<Integer, String> responseRates = surveyResult.getResponseRates();
 
         int questionNumber = 1;
         for (Question question: survey.getQuestions()) {
@@ -192,8 +192,12 @@ public class SurveyController {
 
             Double responseRate = ((double)question.getAnswers().size())/survey.getParticipantNum();
             DecimalFormat format = new DecimalFormat("##.00");
+            double rate = Double.parseDouble(format.format(responseRate));
+            rate *= 100.0;
 
-            responseRates.put(questionNumber, Double.parseDouble(format.format(responseRate).toString()));
+            Double rateStr = Double.parseDouble(format.format(rate));
+
+            responseRates.put(questionNumber, rateStr.toString()+"%");
             questionNumber++;
         }
         surveyResult.prepareMCQ();

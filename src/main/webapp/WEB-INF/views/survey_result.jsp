@@ -7,7 +7,6 @@
 
     <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-base.min.js" type="text/javascript"></script>
 
-
     <script>
         <%@ page import="edu.sjsu.cmpe275.domain.SurveyResult" %>
 
@@ -21,22 +20,15 @@
         console.log(participants);
         console.log(participationRate);
 
-        var mcqToCount = {};
-        var textAnswers = {};
-        var responseRates = {};
-
-
-
-
-
+        // var mcqToCount = {};
 
         // display multiple choice
-        var questions = [];
-        var answers = [];
+        var mcquestions = [];
+        var mcanswers = [];
         <c:forEach items="${surveyResult.mcq}" var="mcq">
             var i = 0;
-            questions.push("${mcq.key}");
-            answers.push(${mcq.value});
+            mcquestions.push("${mcq.key}");
+            mcanswers.push(${mcq.value});
 
             console.log("Question: ", "${mcq.key}");
             console.log("Data: ", ${mcq.value});
@@ -48,13 +40,11 @@
                 var chart = anychart.fromJson(json);
                 // display a chart
                 chart.title("${mcq.key}");
-                console.log(i);
                 chart.container('container' + i).draw();
 
             });
             i += 1;
         </c:forEach>
-
 
 
     </script>
@@ -108,46 +98,66 @@
     <div id="container1" style="width: 500px; height: 400px;"></div>
     <div id="container2" style="width: 500px; height: 400px;"></div>
     <div id="container3" style="width: 500px; height: 400px;"></div>
-    <div id="container4" style="width: 500px; height: 400px;"></div>
-    <div id="container5" style="width: 500px; height: 400px;"></div>
-    <div id="container6" style="width: 500px; height: 400px;"></div>
-    <div id="container7" style="width: 500px; height: 400px;"></div>
-    <div id="container8" style="width: 500px; height: 400px;"></div>
-    <div id="container9" style="width: 500px; height: 400px;"></div>
-    <div id="container10" style="width: 500px; height: 400px;"></div>
+    <%--<div id="container4" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container5" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container6" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container7" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container8" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container9" style="width: 500px; height: 400px;"></div>--%>
+    <%--<div id="container10" style="width: 500px; height: 400px;"></div>--%>
 
     <!-- display short answer
     -- use list group, each question takes one row
     -->
-    <div class="row" id="resultHeader">
-        <h2 id="saTitle"></h2>
-        <ul id="saAnswer" class="list-group"></ul>
-        <script>
+    <div id="shortanswer"></div>
+    <script>
+        // display short answer
+        var saquestions = [];
 
-        </script>
-    </div>
+        // var saanswers = $('#shortanswer');
 
+        var str = '<ul>';
+        <c:forEach items="${surveyResult.textAnswers}" var="textAnswers">
 
+            console.log("Questions: ", "${textAnswers.key}");
+            console.log("Data: ", "${textAnswers.value}");
 
-
-
-
-
-
-
+            saquestions.push("${textAnswers.key}");
 
 
+            str += '<li>' + "${textAnswers.key}" + '</li>';
+
+                <c:forEach items="${textAnswers.value}" var="answer">
+                    str += '<li>' + "${answer}" + '</li>';
+                </c:forEach>
 
 
+            console.log(str);
 
+        </c:forEach>
+        str += '</ul>';
+        document.getElementById("shortanswer").innerHTML = str;
+
+    </script>
 
 
     <!-- display rate question
     -- use table, <th> for question title <td> for rate of that question
     -->
-    <div class="row">
+    <div id="responserate"></div>
+    <script>
+        var str = '<table><thead><tr><th>#</th><th>Response Rate</th></tr></thread><tbody>';
+        <%--var s = "${surveyResult.responseRates}";--%>
+        <%--console.log("s:", s);--%>
 
-    </div>
+        <c:forEach items="${surveyResult.responseRates}" var="responseRates">
+            console.log(${responseRates.key});
+            str += '<td>' + ${responseRates.key} + '</td><td>' + "${responseRates.value}" + '</td>';
+        </c:forEach>
+        str += '</tbody></table>';
+        console.log(str);
+        document.getElementById("responserate").innerHTML = str;
+    </script>
 
 
 </div>

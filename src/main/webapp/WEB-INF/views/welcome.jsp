@@ -34,21 +34,7 @@
 
     function getSurvey() {
         window.location = "/survey/getSurvey";
-        /*
-        var question = $('#questions');
-        $.ajax({
-            type: "GET",
-            url: "/survey/getSurvey",
-            success: function (data) {
-                alert("success");
-                var output = "<p>" + data['surveyName'] + "</p>";
-                question.html(output);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("error");
-            }
-        });
-        */
+
     }
 
 
