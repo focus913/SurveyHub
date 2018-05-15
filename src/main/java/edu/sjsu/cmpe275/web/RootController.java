@@ -11,6 +11,7 @@ public class RootController {
 
     @GetMapping(path = "/signup")
     public String signUp() {
+        System.out.println("SignUp");
         return SIGNUP;
     }
 

@@ -289,12 +289,16 @@ public class SurveyHubService {
         if (null == accoundId || accoundId.isEmpty()) {
             return;
         }
+        AccountToSurvey accountToSurvey;
         Optional<AccountToSurvey> maybeVal =
                 accountToSurveyRepository.findBySurveyIdAndAccountId(surveyId, accoundId);
         if (!maybeVal.isPresent()) {
-            throw new InvalidOperationException("No account to survey record");
+            accountToSurvey = new AccountToSurvey();
+            accountToSurvey.setAccountId(accoundId);
+            accountToSurvey.setSurveyId(surveyId);
+        } else {
+            accountToSurvey = maybeVal.get();
         }
-        AccountToSurvey accountToSurvey = maybeVal.get();
         accountToSurvey.setSubmitted(true);
 
         accountToSurveyRepository.save(accountToSurvey);

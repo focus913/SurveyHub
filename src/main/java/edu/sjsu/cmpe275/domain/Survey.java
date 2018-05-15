@@ -70,9 +70,9 @@ public class Survey {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
     List<Question> questions = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "joinedSurveys")
+    /*@ManyToMany(fetch = FetchType.LAZY, mappedBy = "joinedSurveys")
     @JsonIgnore
-    List<Account> participants = new ArrayList<>();
+    List<Account> participants = new ArrayList<>();*/
 
     public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
@@ -94,9 +94,13 @@ public class Survey {
         this.questions = questions;
     }
 
-    public void setParticipants(List<Account> participants) {
+    /*public void setParticipants(List<Account> participants) {
         this.participants = participants;
     }
+
+    public List<Account> getParticipants() {
+        return participants;
+    }*/
 
     public String getSurveyType() {
 
@@ -113,10 +117,6 @@ public class Survey {
 
     public List<Question> getQuestions() {
         return questions;
-    }
-
-    public List<Account> getParticipants() {
-        return participants;
     }
 
     public String getSurveyId() {

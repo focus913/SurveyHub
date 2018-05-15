@@ -44,12 +44,13 @@ public class Account {
     @JsonIgnore
     private List<Survey> createdSurveys = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    /*@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_to_survey",
                 joinColumns = { @JoinColumn(name = "survey_id")},
                 inverseJoinColumns = { @JoinColumn(name = "account_id")})
     @JsonIgnore
     private List<Survey> joinedSurveys = new ArrayList<>();
+    */
 
     public List<Survey> getCreatedSurveys() {
         return createdSurveys;
@@ -67,9 +68,13 @@ public class Account {
         return verified;
     }
 
-    public List<Survey> getJoinedSurveys() {
+    /*public List<Survey> getJoinedSurveys() {
         return joinedSurveys;
     }
+
+    public void setJoinedSurveys(List<Survey> surveys) {
+        this.joinedSurveys = surveys;
+    }*/
 
     public String getAccountId() {
         return accountId;
@@ -97,10 +102,6 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setJoinedSurveys(List<Survey> surveys) {
-        this.joinedSurveys = surveys;
     }
 
     public void setType(int type) {
