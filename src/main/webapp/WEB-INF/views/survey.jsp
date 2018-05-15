@@ -39,23 +39,24 @@
 
     var surveyName = "${surveyGeneral.surveyName}";
 
-    var accountId = "";
+    var usingAccount = "${surveyGeneral.usingAccount}";
 
-    <c:catch var="exception">${surveyGeneral.accountId}</c:catch>
+    console.log("accountId:" + usingAccount);
+
+    <c:catch var="exception">${surveyGeneral.usingAccount}</c:catch>
     <c:choose>
     <c:when test="${not empty exception}">
     console.log("accountId not available.");
     </c:when>
     <c:otherwise>
-    accountId = "${surveyGeneral.accountId}";
+    usingAccount = "${surveyGeneral.usingAccount}";
     </c:otherwise>
     </c:choose>
 
-
-
+    
     var rJson = {
         surveyId : surveyId,
-        accountId : accountId
+        accountId : usingAccount
     };
 
     var cjson = [];
@@ -175,7 +176,7 @@
 
     //save the data every 10 seconds, it is a good idea to change it to 30-60 seconds or more.
     timerId = window.setInterval(function () {
-        if(accountId)
+        if(usingAccount !== "")
             saveState(survey);
     }, 10000);
 
