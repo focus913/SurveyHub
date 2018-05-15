@@ -41,7 +41,7 @@
 
     var surveyName = "${surveyGeneral.surveyName}";
 
-    var protectMode = "${surveyGeneral.protectMode}";
+    var protectMode = ${surveyGeneral.protectMode};
 
     console.log("the protect mode is: ", protectMode);
 
@@ -106,6 +106,10 @@
     function loadState(survey) {
         survey.data = initData;
         console.log("survey.data = ", initData);
+        if(protectMode === true) {
+            survey.mode = 'display';
+            console.log("set mode display only!!");
+        }
     }
 
     function saveState(survey) {
@@ -194,8 +198,6 @@
             saveState(survey);
     }, 10000);
 
-    if(protectMode == true)
-        survey.mode = 'display';
 
     $("#surveyElement").Survey({
         model: survey,
