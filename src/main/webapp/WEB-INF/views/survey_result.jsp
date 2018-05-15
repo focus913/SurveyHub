@@ -93,7 +93,26 @@
 
     </div>
 
+    <!-- display rate question
+    -- use table, <th> for question title <td> for rate of that question
+    -->
+    <div id="responserate" class="row"></div>
+    <script>
+        var str = '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">Response Rate</th></tr></thread><tbody>';
+        <%--var s = "${surveyResult.responseRates}";--%>
+        <%--console.log("s:", s);--%>
 
+        <c:forEach items="${surveyResult.responseRates}" var="responseRates">
+        console.log(${responseRates.key});
+        str += '<tr><td>' + ${responseRates.key} + '</td><td>' + "${responseRates.value}" + '</td></tr>';
+        </c:forEach>
+        str += '</tbody></table>';
+        console.log(str);
+        document.getElementById("responserate").innerHTML = str;
+    </script>
+
+
+    <hr>
 
     <!-- display short answer
     -- use list group, each question takes one row
@@ -105,7 +124,9 @@
 
         // var saanswers = $('#shortanswer');
 
-        var str = '<ul>';
+        var str = '<table class="table"><thead>' +
+            '<tr><th scope="col">Question</th><th scope="col">Answers</th></tr>' +
+            '</thead><tbody>';
         <c:forEach items="${surveyResult.textAnswers}" var="textAnswers">
 
             console.log("Questions: ", "${textAnswers.key}");
@@ -113,40 +134,24 @@
 
             saquestions.push("${textAnswers.key}");
 
-
-            str += '<li>' + "${textAnswers.key}" + '</li>';
+            str += '<tr><th scope="row">' + "${textAnswers.key}" + '</th>';
 
                 <c:forEach items="${textAnswers.value}" var="answer">
-                    str += '<li>' + "${answer}" + '</li>';
+                    str += '<td>' + "${answer}" + '</td>';
                 </c:forEach>
 
-
+            str += '</tr>';
             console.log(str);
 
         </c:forEach>
-        str += '</ul>';
+        str += '</tbody></table>';
         document.getElementById("shortanswer").innerHTML = str;
 
     </script>
 
 
-    <!-- display rate question
-    -- use table, <th> for question title <td> for rate of that question
-    -->
-    <div id="responserate" class="row"></div>
-    <script>
-        var str = '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">Response Rate</th></tr></thread><tbody>';
-        <%--var s = "${surveyResult.responseRates}";--%>
-        <%--console.log("s:", s);--%>
+    <hr>
 
-        <c:forEach items="${surveyResult.responseRates}" var="responseRates">
-            console.log(${responseRates.key});
-            str += '<tr><td>' + ${responseRates.key} + '</td><td>' + "${responseRates.value}" + '</td></tr>';
-        </c:forEach>
-        str += '</tbody></table>';
-        console.log(str);
-        document.getElementById("responserate").innerHTML = str;
-    </script>
 
     <!-- display multiple choice -->
 
