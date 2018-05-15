@@ -39,11 +39,14 @@
 
     var surveyName = "${surveyGeneral.surveyName}";
 
-    var usingAccount = "${surveyGeneral.usingAccount}";
+    <%--var usingAccount = "${surveyGeneral.usingAccount}";--%>
+    var usingAccount = "";
 
-    console.log("accountId:" + usingAccount);
+    // console.log("accountId:" + usingAccount);
 
-    <c:catch var="exception">${surveyGeneral.usingAccount}</c:catch>
+
+
+    <c:catch var="exception">usingAccount</c:catch>
     <c:choose>
     <c:when test="${not empty exception}">
     console.log("accountId not available.");
