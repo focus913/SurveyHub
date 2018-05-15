@@ -299,7 +299,7 @@ public class SurveyHubService {
 
         accountToSurveyRepository.save(accountToSurvey);
         Account account = getAccountById(accoundId);
-        surveyHubEmailService.sendCreateSurveyComfirmMail(account.getEmail(), surveyId);
+        surveyHubEmailService.sendSubmitSurveyComfirmMail(account.getEmail(), surveyId);
     }
 
     private boolean hasSubmitted(String surveyId) {

@@ -35,7 +35,8 @@ public class SurveyHubEmailService {
         }
     }
 
-    public void sendCreateSurveyComfirmMail(String to, String surveyId) {
+    public void sendSubmitSurveyComfirmMail(String to, String surveyId) {
+        System.out.println("Sending confirm email for " + to);
         String subject = "Survey Submission Confirm";
         String content = "Your survey " + surveyId + " has submitted";
         MimeMessage mimeMessage = mailSender.createMimeMessage();
