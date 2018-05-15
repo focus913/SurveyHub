@@ -97,6 +97,7 @@ public class SurveyHubService {
             return;
         }
 
+        survey.setUsingAccount(accountId);
         Optional<AccountToSurvey> maybeVal =
                 accountToSurveyRepository.findBySurveyIdAndAccountId(survey.getSurveyId(), accountId);
         if (!maybeVal.isPresent()) {
