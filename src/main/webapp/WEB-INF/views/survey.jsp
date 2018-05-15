@@ -30,6 +30,8 @@
 <div id="surveyElement"></div>
 <div id="surveyResult"></div>
 
+<button onclick="myFunction()">Return</button>
+
 <!-- check if content is empty -->
 
 <script>
@@ -38,6 +40,10 @@
     var surveyId = "${surveyGeneral.surveyId}";
 
     var surveyName = "${surveyGeneral.surveyName}";
+
+    var protectMode = "${surveyGeneral.protectMode}";
+
+    console.log("the protect mode is: ", protectMode);
 
     <%--var usingAccount = "${surveyGeneral.usingAccount}";--%>
     var usingAccount = "";
@@ -56,7 +62,7 @@
     </c:otherwise>
     </c:choose>
 
-    
+
     var rJson = {
         surveyId : surveyId,
         accountId : usingAccount
@@ -91,6 +97,11 @@
     </c:forEach>
 
     console.log("outside for loop", cjson);
+
+    function myFunction() {
+        console.log("inside return button function");
+        window.history.back();
+    }
 
     function loadState(survey) {
         survey.data = initData;
@@ -171,7 +182,7 @@
             window.clearInterval(timerId);
 
             document
-                .querySelector('#surveyResult')
+                .querySelector('#surveyResult');
         });
 
     //Load the initial state
@@ -182,6 +193,9 @@
         if(usingAccount !== "")
             saveState(survey);
     }, 10000);
+
+    if(protectMode == true)
+        survey.mode = 'display';
 
     $("#surveyElement").Survey({
         model: survey,
